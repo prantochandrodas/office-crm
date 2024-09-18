@@ -75,7 +75,7 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
 
                 <!--begin:Menu item-->
                 <div data-kt-menu-trigger="click"
-                    class="menu-item here {{ request()->is('project') || request()->is('project/create') ? 'show' : '' }}   menu-accordion">
+                    class="menu-item here {{ request()->is('project') || request()->is('project/create') || request()->is('project/edit/*') ? 'show' : '' }}   menu-accordion">
                     <!--begin:Menu link-->
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -94,7 +94,7 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
                         <!--begin:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('project') || request()->is('project/create') ? 'active' : '' }}"
+                            <a class="menu-link {{ request()->is('project') || request()->is('project/create') || request()->is('project/edit/*') ? 'active' : '' }}"
                                 href="{{route('projectes')}}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -109,6 +109,41 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
                 </div>
                 <!--end:Menu item-->
             
+                  <!--begin:Menu item-->
+                  <div data-kt-menu-trigger="click"
+                  class="menu-item here {{ request()->is('customer') || request()->is('customer/create') || request()->is('customer/edit/*') ? 'show' : '' }}   menu-accordion">
+                  <!--begin:Menu link-->
+                  <span class="menu-link">
+                      <span class="menu-icon">
+                          <i class="ki-duotone ki-bank fs-2">
+                              <span class="path1"></span>
+                              <span class="path2"></span>
+                          </i>
+                      </span>
+                      <span class="menu-title">Customer</span>
+                      <span class="menu-arrow"></span>
+                  </span>
+                  <!--end:Menu link-->
+
+                  <!--begin:Menu sub-->
+                  <div class="menu-sub menu-sub-accordion">
+                      <!--begin:Menu item-->
+                      <div class="menu-item">
+                          <!--begin:Menu link-->
+                          <a class="menu-link {{ request()->is('customer') || request()->is('project/create') ? 'active' : '' }}"
+                              href="{{route('customers')}}">
+                              <span class="menu-bullet">
+                                  <span class="bullet bullet-dot"></span>
+                              </span>
+                              <span class="menu-title">Cutomer</span>
+                          </a>
+                          <!--end:Menu link-->
+                      </div>
+                      <!--end:Menu item-->
+                  </div>
+                  <!--end:Menu sub-->
+              </div>
+              <!--end:Menu item-->
 
                 <!--begin:Menu item-->
                 <div data-kt-menu-trigger="click"

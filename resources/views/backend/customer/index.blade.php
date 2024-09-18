@@ -15,7 +15,7 @@
 @endif
 
 @section('title')
-Project
+Customer
 @endsection
 
 <!--begin::Toolbar-->
@@ -25,14 +25,14 @@ Project
   <!--begin::Page title-->
   <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
       <!--begin::Title-->
-      <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Project
+      <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Customer
       </h1>
       <!--end::Title-->
       <!--begin::Breadcrumb-->
       <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
           <!--begin::Item-->
           <li class="breadcrumb-item text-muted">
-              <a href="{{route('projectes')}}" class="text-muted text-hover-primary">Project</a>
+              <a href="{{route('customers')}}" class="text-muted text-hover-primary">Customer</a>
           </li>
           <!--end::Item-->
           <!--begin::Item-->
@@ -41,7 +41,7 @@ Project
           </li>
           <!--end::Item-->
           <!--begin::Item-->
-          <li class="breadcrumb-item text-muted">Project</li>
+          <li class="breadcrumb-item text-muted">Customer</li>
           <!--end::Item-->
       </ul>
       <!--end::Breadcrumb-->
@@ -58,9 +58,7 @@ Project
 <!--begin::Content container-->
 <div id="kt_app_content_container" class="app-container container-fluid">
   {{-- add button  --}}
-  <a href={{ route('projectes.create') }} class="btn btn-sm btn-success mb-2"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height:20px"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="m3.99 16.854-1.314 3.504a.75.75 0 0 0 .966.965l3.503-1.314a3 3 0 0 0 1.068-.687L18.36 9.175s-.354-1.061-1.414-2.122c-1.06-1.06-2.122-1.414-2.122-1.414L4.677 15.786a3 3 0 0 0-.687 1.068zm12.249-12.63 1.383-1.383c.248-.248.579-.406.925-.348.487.08 1.232.322 1.934 1.025.703.703.945 1.447 1.025 1.934.058.346-.1.677-.348.925L19.774 7.76s-.353-1.06-1.414-2.12c-1.06-1.062-2.121-1.415-2.121-1.415z" fill="#ffffff"></path></g></svg> Add Project</a>
-  
-  
+  <a href={{ route('customers.create') }} class="btn btn-sm btn-success mb-2"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height:20px"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="m3.99 16.854-1.314 3.504a.75.75 0 0 0 .966.965l3.503-1.314a3 3 0 0 0 1.068-.687L18.36 9.175s-.354-1.061-1.414-2.122c-1.06-1.06-2.122-1.414-2.122-1.414L4.677 15.786a3 3 0 0 0-.687 1.068zm12.249-12.63 1.383-1.383c.248-.248.579-.406.925-.348.487.08 1.232.322 1.934 1.025.703.703.945 1.447 1.025 1.934.058.346-.1.677-.348.925L19.774 7.76s-.353-1.06-1.414-2.12c-1.06-1.062-2.121-1.415-2.121-1.415z" fill="#ffffff"></path></g></svg> Add Customer</a>
   <table id="featuredProjectTitleHeading" class="display" style="width:100%">
       <thead>
           <tr>
@@ -86,13 +84,14 @@ Project
     table.dataTable th, table.dataTable td {
         padding: 10px; /* Optional: add some padding for a cleaner look */
     }
-  </style> --}}
+  </style>
+<script> --}}
 <script>
   $(document).ready(function() {
       $('#featuredProjectTitleHeading').DataTable({
           processing: true,
           serverSide: true,
-          ajax: '{{ route('projectes.getdata') }}',
+          ajax: '{{ route('customers.getdata') }}',
           columns: [{
                   data: null, // Use null to signify that this column does not map directly to any data source
                   name: 'serial_number',
