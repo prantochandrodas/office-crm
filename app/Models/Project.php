@@ -9,4 +9,11 @@ class Project extends Model
 {
     use HasFactory;
     protected $fillable=['name','image','description'];
+
+    public function customers()
+    {
+        return $this->belongsToMany(Customer::class, 'customer_projects')
+                    ->withPivot('status', 'note')
+                    ->withTimestamps();
+    }
 }

@@ -100,19 +100,98 @@ class CustomerController extends Controller
 
         return redirect()->route('customers')->with('success', 'Data created successfully');
     }
-
     public function edit($id)
     {
-        $customer = Customer::findOrFail($id);
+        // Fetch the customer with their associated projects
+        $customer = Customer::with('projects')->findOrFail($id);
+        
+        // Fetch all available projects
         $projects = Project::all();
-        $customerProjects = CustomerProject::where('customer_id', $id)->get();
-        return view('backend.customer.edit', compact('customer', 'projects', 'customerProjects'));
+        
+        return view('backend.customer.edit', compact('customer', 'projects'));
     }
-
-    // In your CustomerController or relevant controller
+    
+   
 
     public function update(Request $request, $id)
     {
-        dd($request->all());
+        // Validate the request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|numeric',
+            'designation' => 'nullable|string|max:255',
+            'address' => 'nullable|string',
+            'project_ids.*' => 'nullable|exists:customer_projects,id',
+            'projects.*' => 'nullable|exists:projects,id',
+            'statuses.*' => 'nullable|in:interested,want-to-buy,purchased',
+            'notes.*' => 'nullable|string',
+        ]);
+    
+        // Find the customer
+        $customer = Customer::findOrFail($id);
+    
+        // Update customer details
+        $customer->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'designation' => $request->input('designation'),
+            'address' => $request->input('address'),
+        ]);
+    
+        // Get project data
+        $projectIds = $request->input('project_ids', []);
+        $projects = $request->input('projects', []);
+        $statuses = $request->input('statuses', []);
+        $notes = $request->input('notes', []);
+        
+        // Update or create associated projects
+        foreach ($projects as $index => $projectId) {
+            $customerProjectId = $projectIds[$index] ?? null;
+            $status = $statuses[$index] ?? null;
+            $note = $notes[$index] ?? null;
+            $projectId = (int) $projectId;
+    
+            if ($projectId) {
+                if ($customerProjectId) {
+                    // Update existing record
+                    CustomerProject::where('id', $customerProjectId)
+                        ->where('customer_id', $customer->id)
+                        ->update([
+                            'project_id' => $projectId,
+                            'status' => $status,
+                            'note' => $note,
+                        ]);
+                } else {
+                    // Create new record
+                    try {
+                        CustomerProject::create([
+                            'customer_id' => $customer->id,
+                            'project_id' => $projectId,
+                            'status' => $status,
+                            'note' => $note,
+                        ]);
+                    } catch (\Exception $e) {
+                        dd($e->getMessage());
+                    }
+                }
+            }
+        }
+    
+        // Remove any projects that are not included in the update
+        $currentProjectIds = CustomerProject::where('customer_id', $customer->id)->pluck('id')->toArray();
+        $updatedProjectIds = array_filter($projectIds);
+    
+        $projectsToRemove = array_diff($currentProjectIds, $updatedProjectIds);
+        if ($projectsToRemove) {
+            CustomerProject::whereIn('id', $projectsToRemove)->delete();
+        }
+    
+        // Redirect or return response
+        return redirect()->route('customers')->with('success', 'Customer updated successfully.');
     }
+    
+    
+    
 }

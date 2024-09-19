@@ -10,5 +10,8 @@ class Customer extends Model
     use HasFactory;
     protected $fillable=['customer_id','name','email','phone','designation','address'];
     
-   
+    public function projects()
+    {
+        return $this->hasMany(CustomerProject::class);
+    }
 }

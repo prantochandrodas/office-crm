@@ -14,4 +14,9 @@ class CustomerProject extends Model
         'status',
         'note'
     ];
+
+    // public function project()
+    // {
+    //     return $this->belongsTo(Project::class, 'project_id');
+    // }
 }
