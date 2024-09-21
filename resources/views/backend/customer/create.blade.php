@@ -72,16 +72,25 @@
             @csrf
             {{-- name field  --}}
             <div class="form-group">
-                <label for="name" class="mb-2 fw-bold">Name:</label>
-                <input type="text" class="form-control mb-2" id="name" name="name">
+                <label for="name" class="mb-2 fw-bold">Contact Person:</label>
+                <input type="text" class="form-control mb-2" id="name" name="name" placeholder="Contact Person">
                 @error('name')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+
+             {{-- company_name field  --}}
+             <div class="form-group">
+                <label for="company_name" class="mb-2 fw-bold">Company Name:</label>
+                <input type="text" class="form-control mb-2" id="company_name" name="company_name" placeholder="Company Name">
+                @error('company_name')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
             {{-- email field  --}}
             <div class="form-group">
                 <label for="email" class="mb-2 fw-bold">Email:</label>
-                <input type="email" class="form-control mb-2" id="email" name="email">
+                <input type="email" class="form-control mb-2" id="email" name="email" placeholder="Email">
                 @error('email')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
@@ -90,7 +99,7 @@
             {{-- phone field  --}}
             <div class="form-group">
                 <label for="phone" class="mb-2 fw-bold">Phone:</label>
-                <input type="number" class="form-control mb-2" id="phone" name="phone">
+                <input type="number" class="form-control mb-2" id="phone" name="phone" placeholder="Phone Number">
                 @error('phone')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
@@ -98,7 +107,7 @@
             {{-- designation field  --}}
             <div class="form-group">
                 <label for="designation" class="mb-2 fw-bold">Designation:</label>
-                <input type="text" class="form-control mb-2" id="designation" name="designation">
+                <input type="text" class="form-control mb-2" id="designation" name="designation" placeholder="Designation">
                 @error('designation')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
@@ -107,12 +116,33 @@
             {{-- address field  --}}
             <div class="form-group">
                 <label for="address" class="mb-2 fw-bold">Address:</label>
-                <textarea type="text" name="address" id="address" cols="30" rows="3" class="form-control"></textarea>
+                <textarea type="text" name="address" id="address" cols="30" rows="3" class="form-control" placeholder="Address"></textarea>
                 @error('address')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
+             {{-- note field  --}}
+             <div class="form-group">
+                <label for="note" class="mb-2 fw-bold">Note:</label>
+                <textarea type="text" name="note" id="note" cols="30" rows="3" class="form-control" placeholder="note"></textarea>
+                @error('note')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
 
+            {{-- location_id field  --}}
+            <div class="form-group">
+                <label for="location_id" class="mb-2 fw-bold">Area</label>
+                <select name="location_id" id="location_id" class="form-control">
+                    <option>Select Area</option>
+                    @foreach ($locations as $item)
+                        <option value="{{$item->id}}">{{$item->name}}</option>    
+                    @endforeach
+                </select>
+                @error('location_id')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
             <div id="projects-container">
                 <div class="form-group project-group">
                     <div class="d-flex align-items-center justify-content-between my-2">
@@ -138,7 +168,7 @@
                         </select>
                         <select name="statuses[]" class="form-select me-2" aria-label="Select Status">
                             <option value="">Select Status</option>
-                            <option value="interested">Interested</option>
+                            <option value="1">Contac</option>
                             <option value="want-to-buy">Want To Buy</option>
                             <option value="purchased">Purchased</option>
                             <!-- Add other status options as needed -->

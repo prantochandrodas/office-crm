@@ -75,10 +75,20 @@
 
             <!-- Name field -->
             <div class="form-group">
-                <label for="name" class="mb-2 fw-bold">Name:</label>
+                <label for="name" class="mb-2 fw-bold">Contact Name:</label>
                 <input type="text" class="form-control mb-2" id="name" name="name"
                     value="{{ old('name', $customer->name) }}">
                 @error('name')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- company_name field -->
+            <div class="form-group">
+                <label for="company_name" class="mb-2 fw-bold">Company Name:</label>
+                <input type="text" class="form-control mb-2" id="company_name" name="company_name"
+                    value="{{ old('company_name', $customer->company_name) }}">
+                @error('company_name')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
@@ -118,6 +128,29 @@
                 <label for="address" class="mb-2 fw-bold">Address:</label>
                 <textarea type="text" name="address" id="address" cols="30" rows="3" class="form-control">{{ old('address', $customer->address) }}</textarea>
                 @error('address')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+
+             <!-- note field -->
+             <div class="form-group">
+                <label for="note" class="mb-2 fw-bold">Note:</label>
+                <textarea type="text" name="note" id="note" cols="30" rows="3" class="form-control">{{ old('note', $customer->note) }}</textarea>
+                @error('note')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+
+             {{-- location_id field  --}}
+             <div class="form-group">
+                <label for="location_id" class="mb-2 fw-bold">Area</label>
+                <select name="location_id" id="location_id" class="form-control">
+                    <option>Select Area</option>
+                    @foreach ($locations as $item)
+                        <option value="{{$item->id}}" {{$customer->location_id == $item->id ? 'selected':''}}>{{$item->name}}</option>    
+                    @endforeach
+                </select>
+                @error('location_id')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>

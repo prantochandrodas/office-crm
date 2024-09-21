@@ -1,14 +1,18 @@
 <?php
 
+
 namespace App\Http\Controllers\Backend;
+
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\CustomerProject;
+use App\Models\Location;
 use App\Models\Project;
 use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
+
 
 class CustomerController extends Controller
 {
@@ -16,6 +20,7 @@ class CustomerController extends Controller
     {
         return view('backend.customer.index');
     }
+
 
     public function getdata(Request $request)
     {
@@ -27,6 +32,7 @@ class CustomerController extends Controller
                     $deleteUrl = route('customers.distroy', $row->id);
                     $csrfToken = csrf_field();
                     $method = method_field('DELETE');
+
 
                     $editBtn = '<a href="' . $editUrl . '" class="edit btn btn-sm btn-success me-2 rounded" style="padding:8px;"><span>' .
                         '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">' .
@@ -48,25 +54,33 @@ class CustomerController extends Controller
         }
     }
 
+
     public function create()
     {
         $projects = Project::all();
-        return view('backend.customer.create', compact('projects'));
+        $locations=Location::all();
+        return view('backend.customer.create', compact('projects','locations'));
     }
+
 
     public function store(Request $request)
     {
+        // dd($request->all());
         // Validate the request data
         $request->validate([
             'name' => 'required|string',
+            'company_name' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required',
             'address' => 'required|string',
+            'note' => 'nullable|string',
             'designation' => 'required|string',
+            'location_id' => 'required|integer|exists:locations,id', // Validate project IDs
             'projects.*' => 'required|integer|exists:projects,id', // Validate project IDs
-            'statuses.*' => 'required|string|in:interested,want-to-buy,Purchesed', // Validate statuses
+            'statuses.*' => 'required|string|in:interested,want-to-buy,purchased', // Validate statuses
             'notes.*' => 'nullable|string', // Validate notes
         ]);
+
 
         // Generate new customer ID
         $year = Carbon::now()->year;
@@ -74,20 +88,26 @@ class CustomerController extends Controller
         $nextId = $lastCustomer ? intval(substr($lastCustomer->customer_id, 6)) + 1 : 1;
         $newId = 'C-' . $year . str_pad($nextId, 2, '0', STR_PAD_LEFT);
 
+
         // Create the new customer
         $customer = Customer::create([
             'customer_id' => $newId,
             'name' => $request->input('name'),
+            'company_name' => $request->input('company_name'),
+            'location_id' => $request->input('location_id'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'address' => $request->input('address'),
+            'note' => $request->input('note'),
             'designation' => $request->input('designation'),
         ]);
+
 
         // Save the projects, statuses, and notes
         $projects = $request->input('projects');
         $statuses = $request->input('statuses');
         $notes = $request->input('notes', []);
+
 
         foreach ($projects as $index => $projectId) {
             CustomerProject::create([
@@ -98,26 +118,37 @@ class CustomerController extends Controller
             ]);
         }
 
+
         return redirect()->route('customers')->with('success', 'Data created successfully');
     }
+
+
     public function edit($id)
     {
         // Fetch the customer with their associated projects
         $customer = Customer::with('projects')->findOrFail($id);
-        
+        $locations=Location::all();
+
         // Fetch all available projects
         $projects = Project::all();
-        
-        return view('backend.customer.edit', compact('customer', 'projects'));
+
+
+        return view('backend.customer.edit', compact('customer', 'projects','locations'));
     }
-    
-   
+
+
+
+
+
 
     public function update(Request $request, $id)
     {
         // Validate the request
         $request->validate([
             'name' => 'required|string|max:255',
+            'company_name' => 'required|string',
+            'note' => 'nullable|string',
+            'location_id' => 'required|integer|exists:locations,id',
             'email' => 'required|email|max:255',
             'phone' => 'required|numeric',
             'designation' => 'nullable|string|max:255',
@@ -127,71 +158,83 @@ class CustomerController extends Controller
             'statuses.*' => 'nullable|in:interested,want-to-buy,purchased',
             'notes.*' => 'nullable|string',
         ]);
-    
+
+
         // Find the customer
         $customer = Customer::findOrFail($id);
-    
+
+
         // Update customer details
         $customer->update([
             'name' => $request->input('name'),
+            'location_id' => $request->input('location_id'),
+            'note' => $request->input('note'),
+            'company_name' => $request->input('company_name'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'designation' => $request->input('designation'),
             'address' => $request->input('address'),
         ]);
-    
+
+
         // Get project data
         $projectIds = $request->input('project_ids', []);
         $projects = $request->input('projects', []);
         $statuses = $request->input('statuses', []);
         $notes = $request->input('notes', []);
-        
+
+
+        // Update or create associated projects
         // Update or create associated projects
         foreach ($projects as $index => $projectId) {
-            $customerProjectId = $projectIds[$index] ?? null;
-            $status = $statuses[$index] ?? null;
-            $note = $notes[$index] ?? null;
-            $projectId = (int) $projectId;
-    
             if ($projectId) {
-                if ($customerProjectId) {
-                    // Update existing record
-                    CustomerProject::where('id', $customerProjectId)
-                        ->where('customer_id', $customer->id)
-                        ->update([
-                            'project_id' => $projectId,
-                            'status' => $status,
-                            'note' => $note,
-                        ]);
+                $customerProjectData = [
+                    'project_id' => $projectId,
+                    'status' => $statuses[$index] ?? null,
+                    'note' => $notes[$index] ?? null,
+                ];
+
+
+                // If a project_id exists in the form, update the existing project
+                if (isset($projectIds[$index]) && $projectIds[$index]) {
+                    CustomerProject::where('id', $projectIds[$index])->update($customerProjectData);
                 } else {
-                    // Create new record
-                    try {
-                        CustomerProject::create([
-                            'customer_id' => $customer->id,
-                            'project_id' => $projectId,
-                            'status' => $status,
-                            'note' => $note,
-                        ]);
-                    } catch (\Exception $e) {
-                        dd($e->getMessage());
-                    }
+                    // If no project_id exists in the form, create a new project entry
+                    $customer->projects()->create($customerProjectData);
                 }
             }
         }
-    
-        // Remove any projects that are not included in the update
-        $currentProjectIds = CustomerProject::where('customer_id', $customer->id)->pluck('id')->toArray();
-        $updatedProjectIds = array_filter($projectIds);
-    
-        $projectsToRemove = array_diff($currentProjectIds, $updatedProjectIds);
-        if ($projectsToRemove) {
-            CustomerProject::whereIn('id', $projectsToRemove)->delete();
-        }
-    
-        // Redirect or return response
-        return redirect()->route('customers')->with('success', 'Customer updated successfully.');
+
+
+        // Remove any projects that are no longer assigned
+        CustomerProject::where('customer_id', $customer->id)
+            ->whereNotIn('id', $projectIds)
+            ->delete();
+
+
+        // Redirect back with success message
+        return redirect()->route('customers')->with('success', 'Customer updated successfully');
     }
-    
-    
-    
+
+
+    public function distroy($id)
+    {
+        // Find the customer by ID
+        $customer = Customer::findOrFail($id);
+
+
+        // Delete associated projects
+        CustomerProject::where('customer_id', $customer->id)->delete();
+
+
+        // Delete the customer
+        $customer->delete();
+
+
+        // Redirect back with success message
+        return redirect()->route('customers')->with('success', 'Customer deleted successfully');
+    }
 }
+
+
+

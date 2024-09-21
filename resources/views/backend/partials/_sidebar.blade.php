@@ -6,10 +6,8 @@
     <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
         <!--begin::Logo image-->
         <a href="/">
-            <img alt="Logo" src="{{ asset('application/logo/') }}"
-                class="h-55px app-sidebar-logo-default" />
-            <img alt="Logo" src="{{ asset('application/logo/')}}"
-                class="h-20px app-sidebar-logo-minimize" />
+            <img alt="Logo" src="{{ asset('application/logo/') }}" class="h-55px app-sidebar-logo-default" />
+            <img alt="Logo" src="{{ asset('application/logo/') }}" class="h-20px app-sidebar-logo-minimize" />
         </a>
         <!--end::Logo image-->
         <!--begin::Sidebar toggle-->
@@ -46,8 +44,7 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
                 <!--begin:Menu item-->
                 <div class="menu-item">
                     <!--begin:Menu link-->
-                    <a class="menu-link {{ request()->is('/') ? 'active' : '' }}"
-                        href="{{ route('dashboard') }}">
+                    <a class="menu-link {{ request()->is('/') ? 'active' : '' }}" href="{{ route('dashboard') }}">
                         <span class="menu-icon">
                             <i class="ki-duotone ki-element-11 fs-2">
                                 <span class="path1"></span>
@@ -95,7 +92,7 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
                         <div class="menu-item">
                             <!--begin:Menu link-->
                             <a class="menu-link {{ request()->is('project') || request()->is('project/create') || request()->is('project/edit/*') ? 'active' : '' }}"
-                                href="{{route('projectes')}}">
+                                href="{{ route('projectes') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -108,46 +105,101 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
                     <!--end:Menu sub-->
                 </div>
                 <!--end:Menu item-->
-            
-                  <!--begin:Menu item-->
-                  <div data-kt-menu-trigger="click"
-                  class="menu-item here {{ request()->is('customer') || request()->is('customer/create') || request()->is('customer/edit/*') ? 'show' : '' }}   menu-accordion">
-                  <!--begin:Menu link-->
-                  <span class="menu-link">
-                      <span class="menu-icon">
-                          <i class="ki-duotone ki-bank fs-2">
-                              <span class="path1"></span>
-                              <span class="path2"></span>
-                          </i>
-                      </span>
-                      <span class="menu-title">Customer</span>
-                      <span class="menu-arrow"></span>
-                  </span>
-                  <!--end:Menu link-->
-
-                  <!--begin:Menu sub-->
-                  <div class="menu-sub menu-sub-accordion">
-                      <!--begin:Menu item-->
-                      <div class="menu-item">
-                          <!--begin:Menu link-->
-                          <a class="menu-link {{ request()->is('customer') || request()->is('project/create') ? 'active' : '' }}"
-                              href="{{route('customers')}}">
-                              <span class="menu-bullet">
-                                  <span class="bullet bullet-dot"></span>
-                              </span>
-                              <span class="menu-title">Cutomer</span>
-                          </a>
-                          <!--end:Menu link-->
-                      </div>
-                      <!--end:Menu item-->
-                  </div>
-                  <!--end:Menu sub-->
-              </div>
-              <!--end:Menu item-->
+                <!--begin:Menu item-->
+                <div class="menu-item">
+                    <!--begin:Menu link-->
+                    <a class="menu-link {{ request()->is('division') || request()->is('division/create') || request()->is('division/edit/*') ? 'active' : '' }}"
+                        href="{{ route('divisions') }}">
+                        <span class="menu-icon">
+                            <i class="ki-duotone ki-chart-pie-3 fs-2">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                                <span class="path3"></span>
+                            </i>
+                        </span>
+                        <span class="menu-title">Division</span>
+                    </a>
+                    <!--end:Menu link-->
+                </div>
+                <!--end:Menu item-->
+               
 
                 <!--begin:Menu item-->
+                <div class="menu-item">
+                    <!--begin:Menu link-->
+                    <a class="menu-link {{ request()->is('location') || request()->is('location/create') || request()->is('location/edit/*') ? 'active' : '' }}"
+                        href="{{ route('locations') }}">
+                        <span class="menu-icon">
+                            <i class="ki-duotone ki-element-plus fs-2">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                                <span class="path3"></span>
+                                <span class="path4"></span>
+                                <span class="path5"></span>
+                            </i>
+                        </span>
+                        <span class="menu-title">Location</span>
+                    </a>
+                    <!--end:Menu link-->
+                </div>
+                <!--end:Menu item-->
+
+                 <!--begin:Menu item-->
+                 <div class="menu-item">
+                    <!--begin:Menu link-->
+                    <a class="menu-link {{ request()->is('customer') || request()->is('customer/create') || request()->is('customer/edit/*') ? 'active' : '' }}"
+                        href="{{ route('customers') }}">
+                        <span class="menu-icon">
+                            <i class="ki-duotone ki-user fs-2">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                        </span>
+                        <span class="menu-title">Customer</span>
+                    </a>
+                    <!--end:Menu link-->
+                </div>
+                <!--end:Menu item-->
+
+                
+                <!--begin:Menu item-->
                 <div data-kt-menu-trigger="click"
-                    class="menu-item here menu-accordion">
+                    class="menu-item here {{ request()->is('conversation-log') || request()->is('conversation-log/create') ? 'show' : '' }}   menu-accordion">
+                    <!--begin:Menu link-->
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <i class="ki-duotone ki-bank fs-2">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                            </i>
+                        </span>
+                        <span class="menu-title">Conversation Log</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <!--end:Menu link-->
+
+                    <!--begin:Menu sub-->
+                    <div class="menu-sub menu-sub-accordion">
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->is('conversation-log') || request()->is('conversation-log/create') ? 'active' : '' }}"
+                                href="{{ route('conversation-logs') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Conversation Log</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <!--end:Menu item-->
+                    </div>
+                    <!--end:Menu sub-->
+                </div>
+                <!--end:Menu item-->
+
+                <!--begin:Menu item-->
+                <div data-kt-menu-trigger="click" class="menu-item here menu-accordion">
                     <!--begin:Menu link-->
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -226,7 +278,7 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
                 </div>
                 <!--end:Menu item-->
 
-               
+
             </div>
             <!--end::Menu-->
         </div>
