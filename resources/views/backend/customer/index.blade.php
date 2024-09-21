@@ -139,15 +139,8 @@
                         data:'note',
                         name:'note',
                     },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        render: function(data, type, row) {
-                            return '<div class="btn-group">' + data + '</div>';
-                        }
-                    }
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                  
                 ]
             });
 

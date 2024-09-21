@@ -166,13 +166,7 @@
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
-                        <select name="statuses[]" class="form-select me-2" aria-label="Select Status">
-                            <option value="">Select Status</option>
-                            <option value="1">Contac</option>
-                            <option value="want-to-buy">Want To Buy</option>
-                            <option value="purchased">Purchased</option>
-                            <!-- Add other status options as needed -->
-                        </select>
+                       
                         <textarea name="notes[]" cols="30" rows="1" class="form-control" placeholder="Note"></textarea>
                     </div>
                 </div>
