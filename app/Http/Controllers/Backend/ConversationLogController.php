@@ -55,11 +55,14 @@ class ConversationLogController extends Controller
                 ->make(true);
         }
     }
+   
+
     public function create()
     {
         $customers = Customer::all();
         return view('backend.Conversation_log.create', compact('customers'));
     }
+    
     public function getAssignedProject($id)
     {
         $customer = Customer::find($id);

@@ -1,39 +1,35 @@
 <?php
 
-
 namespace App\Http\Controllers\Backend;
 
-
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\CustomerProject;
 use App\Models\Location;
 use App\Models\Project;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-
-class CustomerController extends Controller
+class ContactClientController extends Controller
 {
     public function index()
     {
-        return view('backend.customer.index');
+        return view('backend.contact_client.index');
     }
 
 
     public function getdata(Request $request)
     {
         if ($request->ajax()) {
-            $data = Customer::where('status',0)->orderBy('created_at', 'desc')->get();
+            $data = Customer::where('status',1)->orderBy('created_at', 'desc')->get();
             return DataTables::of($data)
                 ->addColumn('action', function ($row) {
-                    $editUrl = route('primary-clients.edit', $row->id);
-                    $deleteUrl = route('primary-clients.distroy', $row->id);
+                    $editUrl = route('contact-clients.edit', $row->id);
+                    $deleteUrl = route('contact-clients.distroy', $row->id);
                     $csrfToken = csrf_field();
                     $method = method_field('DELETE');
 
-                    $addContactClient = '<span data-id="' . $row->id . '" style="cursor:pointer; padding:10px; font-size:13px" class="add-contact-client badge rounded-pill text-bg-primary text-light ms-2">add to contact-client</span>';
+                    $addWantedClient = '<span data-id="' . $row->id . '" style="cursor:pointer; padding:10px; font-size:13px" class="add-wanted-client badge rounded-pill text-bg-primary text-light ms-2">add to wanted-client</span>';
 
                     $addNonProspective = '<span data-id="' . $row->id . '" style="cursor:pointer;padding:10px; font-size:13px" class="add-nonprospective badge rounded-pill text-bg-danger text-light ms-2">add to non-prospective</span>';
                     $editBtn = '<a href="' . $editUrl . '" class="edit btn btn-sm btn-success me-2 rounded" style="padding:8px;"><span>' .
@@ -53,7 +49,7 @@ class CustomerController extends Controller
                         . $editBtn . $deleteBtn .
                         '</div>'
                         . '<div class="mt-2 d-flex align-items-center justify-content-center">'
-                        . $addContactClient  .
+                        . $addWantedClient  .
                         '</div>' . '<div class="mt-2 d-flex align-items-center justify-content-center">'
                         . $addNonProspective  .
                         '</div>';
@@ -63,72 +59,6 @@ class CustomerController extends Controller
         }
     }
 
-   
-    public function create()
-    {
-        $projects = Project::all();
-        $locations = Location::all();
-        return view('backend.customer.create', compact('projects', 'locations'));
-    }
-
-
-    public function store(Request $request)
-    {
-        // dd($request->all());
-        // Validate the request data
-        $request->validate([
-            'name' => 'required|string',
-            'company_name' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required|string',
-            'note' => 'nullable|string',
-            'designation' => 'required|string',
-            'location_id' => 'required|integer|exists:locations,id', // Validate project IDs
-            'projects.*' => 'required|integer|exists:projects,id', // Validate project IDs
-            'notes.*' => 'nullable|string', // Validate notes
-        ]);
-
-
-        // Generate new customer ID
-        $year = Carbon::now()->year;
-        $lastCustomer = Customer::where('customer_id', 'like', 'C-' . $year . '%')->orderBy('customer_id', 'desc')->first();
-        $nextId = $lastCustomer ? intval(substr($lastCustomer->customer_id, 6)) + 1 : 1;
-        $newId = 'C-' . $year . str_pad($nextId, 2, '0', STR_PAD_LEFT);
-
-
-        // Create the new customer
-        $customer = Customer::create([
-            'customer_id' => $newId,
-            'name' => $request->input('name'),
-            'status' => 0,
-            'company_name' => $request->input('company_name'),
-            'location_id' => $request->input('location_id'),
-            'email' => $request->input('email'),
-            'phone' => $request->input('phone'),
-            'address' => $request->input('address'),
-            'note' => $request->input('note'),
-            'designation' => $request->input('designation'),
-        ]);
-
-
-        // Save the projects, statuses, and notes
-        $projects = $request->input('projects');
-        // $statuses = $request->input('statuses');
-        $notes = $request->input('notes', []);
-
-
-        foreach ($projects as $index => $projectId) {
-            CustomerProject::create([
-                'customer_id' => $customer->id,
-                'project_id' => $projectId,
-                'note' => $notes[$index] ?? null, // Use null if note is not provided
-            ]);
-        }
-
-
-        return redirect()->route('primary-clients')->with('success', 'Data created successfully');
-    }
 
 
     public function edit($id)
@@ -139,7 +69,7 @@ class CustomerController extends Controller
 
         // Fetch all available projects
         $projects = Project::all();
-        return view('backend.customer.edit', compact('customer', 'projects', 'locations'));
+        return view('backend.contact_client.edit', compact('customer', 'projects', 'locations'));
     }
 
 
@@ -161,6 +91,7 @@ class CustomerController extends Controller
             'address' => 'nullable|string',
             'project_ids.*' => 'nullable|exists:customer_projects,id',
             'projects.*' => 'nullable|exists:projects,id',
+            
             'notes.*' => 'nullable|string',
         ]);
 
@@ -216,7 +147,7 @@ class CustomerController extends Controller
 
 
         // Redirect back with success message
-        return redirect()->route('primary-clients')->with('success', 'Customer updated successfully');
+        return redirect()->route('contact-clients')->with('success', 'Data updated successfully');
     }
 
 
@@ -229,21 +160,7 @@ class CustomerController extends Controller
         // Delete the customer
         $customer->delete();
         // Redirect back with success message
-        return redirect()->route('primary-clients')->with('success', 'Customer deleted successfully');
+        return redirect()->route('contact-clients')->with('success', 'Data deleted successfully');
     }
 
-    public function updateStatus(Request $request, $id)
-    {
-        $customer = Customer::find($id);
-
-        if ($customer) {
-            // Update the status
-            $customer->status = $request->input('status');
-            $customer->save();
-
-            return response()->json(['message' => 'Status updated successfully']);
-        } else {
-            return response()->json(['message' => 'Customer not found'], 404);
-        }
-    }
 }

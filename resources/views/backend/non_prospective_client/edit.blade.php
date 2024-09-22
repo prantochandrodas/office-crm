@@ -1,16 +1,6 @@
 @extends('layouts.backend')
 
 @section('content')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <!-- Success message  -->
     @if (session('success'))
         <div class="alert alert-success">
@@ -26,7 +16,7 @@
     @endif
 
 @section('title')
-Primary-client
+    Edit Contact-Client
 @endsection
 
 <!--begin::Toolbar-->
@@ -43,7 +33,7 @@ Primary-client
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('primary-clients') }}" class="text-muted text-hover-primary">All-Primary-Client</a>
+                    <a href="{{ route('contact-clients') }}" class="text-muted text-hover-primary">All-Contact-Client</a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
@@ -69,7 +59,7 @@ Primary-client
     </div>
 
     <div style="background-color: #fff; padding: 20px; border: 1px solid #ccc;">
-        <form method="POST" action="{{ route('primary-clients.update', $customer->id) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('contact-clients.update', $customer->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 

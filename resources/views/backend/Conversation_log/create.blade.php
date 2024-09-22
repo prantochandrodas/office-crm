@@ -74,11 +74,10 @@
 
             <div style="margin-bottom: 20px;">
                 <label for="customer_id" style="display: block; margin-bottom: 5px;">Customer:</label>
-                <select id="customer_id" name="customer_id" class="form-control customer_name"
-                    style="width: 100%; padding: 8px;">
+                <select id="customer_id" name="customer_id" class="form-control example select2" style="width: 100%;">
                     <option value="">Select Customer</option>
                     @foreach ($customers as $item)
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->phone }})</option>
                     @endforeach
                 </select>
             </div>
@@ -98,46 +97,45 @@
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
-
-
-
             <button type="submit" class="btn btn-primary btn-sm mt-4">Create</button>
         </form>
     </div>
 </div>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+
+
+
 <script>
     $(document).ready(function() {
+        $('.example').select2();
+        // Handle project selection based on customer
+        $(document).on('change', '#customer_id', function() {
+            let customerId = $(this).val();
+            if (customerId) {
+                $.ajax({
+                    url: '/assigned/project/' + customerId,
+                    type: 'GET',
+                    success: function(data) {
+                        $('#project_id').empty().append('<option>Select Project</option>');
+                        if (data.length > 0) {
+                            $.each(data, function(key, value) {
+                                $('#project_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+                            });
+                        } else {
+                            $('#project_id').append('<option>No projects available</option>');
+                        }
+                    }
+                });
+            } else {
+                $('#project_id').empty().append('<option>Select Project</option>');
+            }
+        });
+
+        // Initialize Summernote
         $('#summernote').summernote({
             height: 250
         });
     });
-    $(document).on('change', '.customer_name', function() {
-        let customerId = $(this).val();
-        let incomeHead = $(this).find('#project_id');
-        if (customerId) {
-            $.ajax({
-                url: '/assigned/project/' + customerId,
-                type: 'GET',
-                success: function(data) {
-                    console.log(data);
-                    $('#project_id').empty();
-                    $('#project_id').append('<option>Select Project</option>');
-                    $.each(data, function(key, value) {
-                        if (data.length > 0) {
-                            $('#project_id').append('<option value="' + value.id +
-                                '">' + value.name + '</option>');
-                        } else {
-                            $('#project_id').append('<option>' + value + '</option>');
-                        }
-
-                    });
-                }
-            })
-        } else {
-            $('#project_id').empty();
-            $('#project_id').append('<option>Select Project</option>');
-        }
-    });
 </script>
+
 @endsection

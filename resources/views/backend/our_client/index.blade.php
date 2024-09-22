@@ -15,7 +15,7 @@
     @endif
 
 @section('title')
-    Primary-client
+    Our-client
 @endsection
 
 <!--begin::Toolbar-->
@@ -32,7 +32,7 @@
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('primary-clients') }}" class="text-muted text-hover-primary">All-Primary-Client</a>
+                    <a href="{{ route('our-clients') }}" class="text-muted text-hover-primary">Our-Client</a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
@@ -57,17 +57,6 @@
 <div id="kt_app_content" class="app-content flex-column-fluid">
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-fluid">
-        {{-- add button  --}}
-        <a href={{ route('primary-clients.create') }} class="btn btn-sm btn-success mb-2"><svg viewBox="0 0 24 24"
-                fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height:20px">
-                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                <g id="SVGRepo_iconCarrier">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                        d="m3.99 16.854-1.314 3.504a.75.75 0 0 0 .966.965l3.503-1.314a3 3 0 0 0 1.068-.687L18.36 9.175s-.354-1.061-1.414-2.122c-1.06-1.06-2.122-1.414-2.122-1.414L4.677 15.786a3 3 0 0 0-.687 1.068zm12.249-12.63 1.383-1.383c.248-.248.579-.406.925-.348.487.08 1.232.322 1.934 1.025.703.703.945 1.447 1.025 1.934.058.346-.1.677-.348.925L19.774 7.76s-.353-1.06-1.414-2.12c-1.06-1.062-2.121-1.415-2.121-1.415z"
-                        fill="#ffffff"></path>
-                </g>
-            </svg> Add Client</a>
         <table id="featuredProjectTitleHeading" class="display" style="width:100%">
             <thead>
                 <tr>
@@ -113,7 +102,7 @@
             $('#featuredProjectTitleHeading').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('primary-clients.getdata') }}',
+                ajax: '{{ route('our-clients.getdata') }}',
                 columns: [{
                         data: null, // Use null to signify that this column does not map directly to any data source
                         name: 'serial_number',
@@ -158,44 +147,6 @@
                 ]
             });
 
-        });
-
-        $(document).on('click', '.add-contact-client', function() {
-            var customerId = $(this).data('id');
-            $.ajax({
-                url: '/client/' + customerId + '/update-status',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    status: 1 // Set the status you want here
-                },
-                success: function(response) {
-                    toastr.success(response.message); 
-                    // Optionally, reload the DataTable or update the row dynamically
-                },
-                error: function(xhr) {
-                    toastr.error('Error updating status'); 
-                }
-            });
-        });
-
-        $(document).on('click', '.add-nonprospective', function() {
-            var customerId = $(this).data('id');
-            $.ajax({
-                url: '/client/' + customerId + '/update-status',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    status: 5 // Set the status you want here
-                },
-                success: function(response) {
-                    toastr.success(response.message); 
-                    // Optionally, reload the DataTable or update the row dynamically
-                },
-                error: function(xhr) {
-                    toastr.error('Error updating status'); 
-                }
-            });
         });
     </script>
 @endsection
