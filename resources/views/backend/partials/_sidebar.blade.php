@@ -378,24 +378,42 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
                     </span>
                     <!--end:Menu link-->
 
-                    <!--begin:Menu sub-->
-                    {{-- <div class="menu-sub menu-sub-accordion">
+                     <!--begin:Menu sub-->
+                    <div class="menu-sub menu-sub-accordion">
                         <!--begin:Menu item-->
                         <div class="menu-item">
                             <!--begin:Menu link-->
-                            <a class="menu-link {{ request()->is('create-user') || request()->is('create-user/create') || request()->is('create-user/edit/*') ? 'active' : '' }}"
-                                href="{{ route('create-users.index') }}">
+                            <a class="menu-link {{ request()->is('user') ? 'active' : '' }}"
+                                href="{{ route('user.index') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Create-User</span>
+                                <span class="menu-title">User</span>
                             </a>
                             <!--end:Menu link-->
                         </div>
                         <!--end:Menu item-->
-                    </div> --}}
+                    </div>
                     <!--end:Menu sub-->
 
+
+                    <!--begin:Menu sub-->
+                    <div class="menu-sub menu-sub-accordion">
+                        <!--begin:Menu item-->
+                        <div class="menu-item">
+                            <!--begin:Menu link-->
+                            <a class="menu-link {{ request()->is('role') || request()->is('role/create') || request()->is('role/edit/*') ? 'active' : '' }}"
+                                href="{{ route('role.index') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Roles</span>
+                            </a>
+                            <!--end:Menu link-->
+                        </div>
+                        <!--end:Menu item-->
+                    </div>
+                    <!--end:Menu sub-->
 
                     <!--begin:Menu sub-->
                     {{-- <div class="menu-sub menu-sub-accordion">
@@ -414,6 +432,7 @@ if (isset($_COOKIE["sidebar_minimize_state"]) && $_COOKIE["sidebar_minimize_stat
                         <!--end:Menu item-->
                     </div> --}}
                     <!--end:Menu sub-->
+                   
 
                     <!--begin:Menu sub-->
                     {{-- <div class="menu-sub menu-sub-accordion">

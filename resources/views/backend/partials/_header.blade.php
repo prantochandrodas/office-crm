@@ -14,9 +14,9 @@
         <!--end::Sidebar mobile toggle-->
         <!--begin::Mobile logo-->
         <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-            <a href="/" class="d-lg-none" style="background: black; padding:5px">
-                <img alt="Logo" src="{{asset('application/logo/')}}" class="h-30px" />
-            </a>
+            {{-- <a href="{{route('home.index')}}" class="d-lg-none" style="background: black; padding:5px">
+                <img alt="Logo" src="{{asset('images/' .generalsettings()->logo)}}" class="h-30px" />
+            </a> --}}
         </div>
         <!--end::Mobile logo-->
         <!--begin::Header wrapper-->
@@ -110,7 +110,7 @@
                     <!--end::Menu-->
                 </div>
                 <!--end::Theme mode-->
-                {{-- <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center">
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
@@ -119,7 +119,7 @@
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         Logout
                     </a>
-                </div> --}}
+                </div>
                 {{-- <!--begin::User menu-->
                 <div class="app-navbar-item ms-1 ms-md-3" id="kt_header_user_menu_toggle">
                     <!--begin::Menu wrapper-->

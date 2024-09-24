@@ -29,7 +29,7 @@ class NonProspectiveClientController extends Controller
                     $csrfToken = csrf_field();
                     $method = method_field('DELETE');
 
-                    $addPrimaryClient = '<span data-id="' . $row->id . '" style="cursor:pointer; padding:10px; font-size:13px" class="add-primary-client badge rounded-pill text-bg-primary text-light ms-2">add to primary-client</span>';
+                    $addPrimaryClient = '<span data-id="' . $row->id . '" style="cursor:pointer; padding:10px; font-size:13px" class="add-primary-client badge rounded-pill text-bg-primary text-light ms-2">Add To Primary Client</span>';
 
                     $editBtn = '<a href="' . $editUrl . '" class="edit btn btn-sm btn-success me-2 rounded" style="padding:8px;"><span>' .
                         '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">' .

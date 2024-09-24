@@ -55,10 +55,10 @@ class ProjectController extends Controller
        
         $request->validate([
             'name' => 'required|string',
-            'image' => 'required|image|mimes:png,jpg,jpeg,webp,svg',
-            'description' => 'required|string'
+            'image' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg',
+            'description' => 'nullable|string'
         ]);
-
+        $imagePath=null;
         if ($request->has('image')) {
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();

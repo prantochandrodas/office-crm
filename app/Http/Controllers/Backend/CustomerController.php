@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\ConversationLog;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\CustomerProject;
@@ -18,14 +19,15 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        return view('backend.customer.index');
+        $customers = Customer::all();
+        return view('backend.customer.index', compact('customers'));
     }
 
 
     public function getdata(Request $request)
     {
         if ($request->ajax()) {
-            $data = Customer::where('status',0)->orderBy('created_at', 'desc')->get();
+            $data = Customer::where('status', 0)->orderBy('created_at', 'desc')->get();
             return DataTables::of($data)
                 ->addColumn('action', function ($row) {
                     $editUrl = route('primary-clients.edit', $row->id);
@@ -33,9 +35,30 @@ class CustomerController extends Controller
                     $csrfToken = csrf_field();
                     $method = method_field('DELETE');
 
-                    $addContactClient = '<span data-id="' . $row->id . '" style="cursor:pointer; padding:10px; font-size:13px" class="add-contact-client badge rounded-pill text-bg-primary text-light ms-2">add to contact-client</span>';
+                    $addContactClient = '<span data-id="' . $row->id . '" style="cursor:pointer; padding:10px; font-size:13px" class="add-contact-client badge rounded-pill text-bg-primary text-light ms-2">Add To Contact Client</span>';
 
-                    $addNonProspective = '<span data-id="' . $row->id . '" style="cursor:pointer;padding:10px; font-size:13px" class="add-nonprospective badge rounded-pill text-bg-danger text-light ms-2">add to non-prospective</span>';
+                    $addNonProspective = '<span data-id="' . $row->id . '" style="cursor:pointer;padding:10px; font-size:13px" class="add-nonprospective badge rounded-pill text-bg-danger text-light ms-2">Add To Non Prospective</span>';
+
+                    $addConversation = '<button class="btn btn-sm btn-primary ms-2 add-conversation" style="padding: 8px;" data-customer-id="' . $row->id . '"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    <span>
+                    <svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#ffffff" style="width:20px; height:20px;">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <title>comment 3</title>
+                            <desc>Created with Sketch Beta.</desc>
+                            <defs></defs>
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                                <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-207.000000, -257.000000)" fill="#ffffff">
+                                    <path d="M231,273 C229.896,273 229,272.104 229,271 C229,269.896 229.896,269 231,269 C232.104,269 233,269.896 233,271 C233,272.104 232.104,273 231,273 L231,273 Z M223,273 C221.896,273 221,272.104 221,271 C221,269.896 221.896,269 223,269 C224.104,269 225,269.896 225,271 C225,272.104 224.104,273 223,273 L223,273 Z M215,273 C213.896,273 213,272.104 213,271 C213,269.896 213.896,269 215,269 C216.104,269 217,269.896 217,271 C217,272.104 216.104,273 215,273 L215,273 Z M223,257 C214.164,257 207,263.269 207,271 C207,275.419 209.345,279.354 213,281.919 L213,289 L220.009,284.747 C220.979,284.907 221.977,285 223,285 C231.836,285 239,278.732 239,271 C239,263.269 231.836,257 223,257 L223,257 Z" id="comment-3" sketch:type="MSShapeGroup"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
+                    </span></button>';
+
+
+
                     $editBtn = '<a href="' . $editUrl . '" class="edit btn btn-sm btn-success me-2 rounded" style="padding:8px;"><span>' .
                         '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">' .
                         '<g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z" fill="#ffffff"></path> </g></svg>' .
@@ -50,7 +73,7 @@ class CustomerController extends Controller
                             </button>
                 </form>';
                     return '<div class="d-flex align-items-center justify-content-center mb-2">'
-                        . $editBtn . $deleteBtn .
+                        . $editBtn . $deleteBtn . $addConversation .
                         '</div>'
                         . '<div class="mt-2 d-flex align-items-center justify-content-center">'
                         . $addContactClient  .
@@ -63,7 +86,6 @@ class CustomerController extends Controller
         }
     }
 
-   
     public function create()
     {
         $projects = Project::all();
@@ -77,15 +99,15 @@ class CustomerController extends Controller
         // dd($request->all());
         // Validate the request data
         $request->validate([
-            'name' => 'required|string',
-            'company_name' => 'required|string',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required|string',
+            'name' => 'nullable|string',
+            'company_name' => 'nullable|string',
+            'email' => 'nullable|email',
+            'phone' => 'nullable',
+            'address' => 'nullable|string',
             'note' => 'nullable|string',
-            'designation' => 'required|string',
-            'location_id' => 'required|integer|exists:locations,id', // Validate project IDs
-            'projects.*' => 'required|integer|exists:projects,id', // Validate project IDs
+            'designation' => 'nullable|string',
+            'location_id' => 'nullable|integer|exists:locations,id', // Validate project IDs
+            'projects.*' => 'nullable|integer|exists:projects,id', // Validate project IDs
             'notes.*' => 'nullable|string', // Validate notes
         ]);
 
@@ -151,12 +173,12 @@ class CustomerController extends Controller
     {
         // Validate the request
         $request->validate([
-            'name' => 'required|string|max:255',
-            'company_name' => 'required|string',
+            'name' => 'nullable|string|max:255',
+            'company_name' => 'nullable|string',
             'note' => 'nullable|string',
-            'location_id' => 'required|integer|exists:locations,id',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|numeric',
+            'location_id' => 'nullable|integer|exists:locations,id',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|numeric',
             'designation' => 'nullable|string|max:255',
             'address' => 'nullable|string',
             'project_ids.*' => 'nullable|exists:customer_projects,id',
@@ -245,5 +267,19 @@ class CustomerController extends Controller
         } else {
             return response()->json(['message' => 'Customer not found'], 404);
         }
+    }
+
+    public function getCustomerData($id)
+    {
+        $customer = Customer::find($id);
+        $projects = $customer->demo;// Fetch all projects, or filter as needed
+        // $conversationLogs = ConversationLog::where('customer_id', $customer->id)
+        // ->whereIn('project_id', $projects->pluck('id'))
+        // ->first(); 
+        return response()->json([
+            // 'conversationLogs' => $conversationLogs,
+            'customer' => $customer,
+            'projects' => $projects,
+        ]);
     }
 }

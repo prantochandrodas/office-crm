@@ -160,6 +160,7 @@
                 },
                 success: function(response) {
                     toastr.success(response.message); 
+                    $('#featuredProjectTitleHeading').DataTable().ajax.reload(null, false);
                     // Optionally, reload the DataTable or update the row dynamically
                 },
                 error: function(xhr) {
@@ -179,6 +180,7 @@
                 },
                 success: function(response) {
                     toastr.success(response.message); 
+                    $('#featuredProjectTitleHeading').DataTable().ajax.reload(null, false);
                     // Optionally, reload the DataTable or update the row dynamically
                 },
                 error: function(xhr) {

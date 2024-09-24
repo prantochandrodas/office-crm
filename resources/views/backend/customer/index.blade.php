@@ -32,7 +32,8 @@
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('primary-clients') }}" class="text-muted text-hover-primary">All-Primary-Client</a>
+                    <a href="{{ route('primary-clients') }}"
+                        class="text-muted text-hover-primary">All-Primary-Client</a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
@@ -83,6 +84,48 @@
             </thead>
         </table>
     </div>
+
+    {{-- modal  --}}
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Conversation</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ route('conversation-logs.store') }}" enctype="multipart/form-data"
+                        id="conversationLogForm">
+                        @csrf
+                        <div class="form-group">
+                            <label for="modal_customer_id">Customer:</label>
+                            <select id="modal_customer_id" name="customer_id" class="form-control example select2" readonly>
+                                <option value="">Select Customer</option>
+                                @foreach ($customers as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }} ({{ $item->phone }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="modal_project_id">Assigned Project:</label>
+                            <select id="modal_project_id" name="project_id" class="form-control">
+                                <option value="">Select Project</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="modal_note">Note:</label>
+                            <textarea name="note" id="modal_note" cols="30" rows="3" class="form-control"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 
     <!-- Custom CSS for Table Borders -->
     <style>
@@ -162,6 +205,7 @@
 
         $(document).on('click', '.add-contact-client', function() {
             var customerId = $(this).data('id');
+
             $.ajax({
                 url: '/client/' + customerId + '/update-status',
                 type: 'POST',
@@ -170,17 +214,19 @@
                     status: 1 // Set the status you want here
                 },
                 success: function(response) {
-                    toastr.success(response.message); 
+                    toastr.success(response.message);
+                    $('#featuredProjectTitleHeading').DataTable().ajax.reload(null, false);
                     // Optionally, reload the DataTable or update the row dynamically
                 },
                 error: function(xhr) {
-                    toastr.error('Error updating status'); 
+                    toastr.error('Error updating status');
                 }
             });
         });
 
         $(document).on('click', '.add-nonprospective', function() {
             var customerId = $(this).data('id');
+
             $.ajax({
                 url: '/client/' + customerId + '/update-status',
                 type: 'POST',
@@ -189,13 +235,52 @@
                     status: 5 // Set the status you want here
                 },
                 success: function(response) {
-                    toastr.success(response.message); 
+                    toastr.success(response.message);
+                    $('#featuredProjectTitleHeading').DataTable().ajax.reload(null, false);
                     // Optionally, reload the DataTable or update the row dynamically
                 },
                 error: function(xhr) {
-                    toastr.error('Error updating status'); 
+                    toastr.error('Error updating status');
                 }
             });
+        });
+
+        $(document).on('click', '.add-conversation', function() {
+            $('#staticBackdrop').modal('show');
+            let customerId = $(this).data('customer-id');
+
+            // Fetch customer data based on the selected customer ID
+            $.ajax({
+                url: '/get-customer-data/' + customerId,
+                type: 'GET',
+                success: function(data) {
+
+                    
+
+                    // Update customer dropdown dynamically and set the selected option
+                    $('#modal_customer_id').empty().append('<option value="">Select Customer</option>');
+                    let selected = data.customer.id == customerId ? 'selected' : '';
+                    $('#modal_customer_id').append('<option value="' + data.customer.id + '" ' +
+                        selected + '>' + data.customer.name + '</option>');
+
+                    
+                    
+
+                    // Populate the project dropdown
+                    $('#modal_project_id').empty().append('<option>Select Project</option>');
+                    if (data.projects.length > 0) {
+                        $.each(data.projects, function(key, project) {
+                            $('#modal_project_id').append('<option value="' + project.id +
+                                '">' + project.name + '</option>');
+                        });
+                    } else {
+                        $('#modal_project_id').append('<option>No projects available</option>');
+                    }
+                }
+            });
+
+            // Reset the conversation log form
+            $('#conversationLogForm')[0].reset();
         });
     </script>
 @endsection

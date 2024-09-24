@@ -77,10 +77,11 @@ class ConversationLogController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'project_id' => 'required|exists:projects,id',
-            'note' => 'required|string'
+            'note' => 'nullable|string'
         ]);
 
         ConversationLog::create([
@@ -89,7 +90,7 @@ class ConversationLogController extends Controller
             'note' => $request->note
         ]);
 
-        return redirect()->route('conversation-logs')->with('success', 'Data inserted successfull');
+        return redirect()->back()->with('success', 'Data inserted successfull');
     }
 
     public function edit($id){
@@ -102,7 +103,7 @@ class ConversationLogController extends Controller
         $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'project_id' => 'required|exists:projects,id',
-            'note' => 'required|string'
+            'note' => 'nullable|string'
         ]);
 
         $data=ConversationLog::findOrFail($id);
