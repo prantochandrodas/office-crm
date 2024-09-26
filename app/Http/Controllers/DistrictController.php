@@ -1,39 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\District;
 use App\Models\Division;
-use App\Models\Location;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class LocationController extends Controller
+class DistrictController extends Controller
 {
     public function index()
     {
-        return view('backend.location.index');
+        return view('backend.districts.index');
     }
 
 
     public function getdata(Request $request)
     {
         if ($request->ajax()) {
-            $data = Location::orderBy('created_at', 'desc')->get();
+            $data = District::orderBy('created_at', 'desc')->get();
             return DataTables::of($data)
-                ->addColumn('division', function ($row) {
-                    return $row->division? $row->division->name :'N/A';
-                })
-                ->addColumn('district', function ($row) {
-                    return $row->district? $row->district->name :'N/A';
-                })
-                ->addColumn('description', function ($row) {
-                    return $row->description ? $row->description : 'N/A';
+                ->addColumn('division',function($row){
+                    return $row->division? $row->division->name : 'N/A';
                 })
                 ->addColumn('action', function ($row) {
-                    $editUrl = route('locations.edit', $row->id);
-                    $deleteUrl = route('locations.distroy', $row->id);
+                    $editUrl = route('districts.edit', $row->id);
+                    $deleteUrl = route('districts.distroy', $row->id);
                     $csrfToken = csrf_field();
                     $method = method_field('DELETE');
 
@@ -61,8 +53,8 @@ class LocationController extends Controller
 
     public function create()
     {
-        $divisions = Division::all();
-        return view('backend.location.create', compact('divisions'));
+        $data=Division::all();
+        return view('backend.districts.create',compact('data'));
     }
 
 
@@ -70,79 +62,58 @@ class LocationController extends Controller
     {
         // Validate the request data
         $request->validate([
-            'name' => 'nullable|string',
             'division_id' => 'required|exists:divisions,id',
-            'district_id' => 'required|exists:districts,id',
-            'description' => 'nullable|string'
+            'name' => 'nullable|string',
         ]);
 
-        Location::create([
-            'name' => $request->name,
+        District::create([
             'division_id' => $request->division_id,
-            'district_id' => $request->district_id,
-            'description' => $request->description
+            'name' => $request->name
         ]);
-        return redirect()->route('locations')->with('success', 'Data created successfully');
+        return redirect()->route('districts')->with('success', 'Data created successfully');
     }
 
 
     public function edit($id)
     {
         // Fetch the customer with their associated projects
-        $data = Location::findOrFail($id);
-        $divisions = Division::all();
-        $districts=District::all();
-        return view('backend.location.edit', compact('data', 'divisions','districts'));
+        $division=Division::all();
+        $data = District::findOrFail($id);
+
+        return view('backend.districts.edit', compact('data','division'));
     }
 
     public function update(Request $request, $id)
     {
         // Validate the request
         $request->validate([
-            'name' => 'nullable|string',
             'division_id' => 'required|exists:divisions,id',
-            'district_id' => 'required|exists:districts,id',
-            'description' => 'nullable|string'
+            'name' => 'nullable|string',
         ]);
 
         // Find the customer
-        $data = Location::findOrFail($id);
+        $district = District::findOrFail($id);
 
 
         // Update customer details
-        $data->update([
+        $district->update([
             'name' => $request->input('name'),
             'division_id' => $request->input('division_id'),
-            'district_id' => $request->input('district_id'),
-            'description' => $request->input('description'),
         ]);
 
 
         // Redirect back with success message
-        return redirect()->route('locations')->with('success', 'Data updated successfully');
+        return redirect()->route('districts')->with('success', 'Data updated successfully');
     }
 
 
     public function distroy($id)
     {
         // Find the customer by ID
-        $data = Location::findOrFail($id);
+        $data = District::findOrFail($id);
         // Delete the customer
         $data->delete();
         // Redirect back with success message
-        return redirect()->route('locations')->with('success', 'Data deleted successfully');
-    }
-
-    public function getDistrict($id){
-        $data=District::where('division_id',$id)->get();
-
-        if ($data->isEmpty()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'No district found'
-            ], 404);
-        } else {
-            return response()->json($data);
-        }
+        return redirect()->route('districts')->with('success', 'Data deleted successfully');
     }
 }

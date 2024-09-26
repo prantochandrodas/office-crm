@@ -65,19 +65,30 @@
             {{-- division_id field  --}}
             <div class="form-group">
                 <label for="division_id" class="mb-2 fw-bold">Division:</label>
-                <select name="division_id" id="division_id" class="form-control">
+                <select name="division_id" id="division_id" class="form-control example select2">
                     <option>Select Division</option>
                     @foreach ($divisions as $item)
                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                     @endforeach
                 </select>
-                @error('name')
+                @error('division_id')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+
+             {{-- district_id field  --}}
+             <div class="form-group">
+                <label for="district_id" class="mb-2 fw-bold">District:</label>
+                <select name="district_id" id="district_id" class="form-control example2 select2">
+                    <option>Select District</option>
+                </select>
+                @error('district_id')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
             {{-- name field  --}}
             <div class="form-group">
-                <label for="name" class="mb-2 fw-bold">Name:</label>
+                <label for="name" class="mb-2 fw-bold">Area Name:</label>
                 <input type="text" class="form-control mb-2" id="name" name="name">
                 @error('name')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
@@ -99,4 +110,38 @@
     </div>
 </div>
 
+
+<script>
+     $(document).ready(function(){
+        $('.example').select2();
+        $('.example2').select2();
+        $(document).on('change', '#division_id', function() {
+            let divisionId = $(this).val();
+            let district = $(this).find('#district_id');
+            if (divisionId) {
+                $.ajax({
+                    url: '/get-district/' + divisionId,
+                    type: 'GET',
+                    success: function(data) {
+                        $('#district_id').empty();
+                        $('#district_id').append('<option>Select District</option>');
+                        $.each(data, function(key, value) {
+                            if (data.length > 0) {
+                                $('#district_id').append('<option value="' + value.id +
+                                    '">' + value.name + '</option>');
+                            } else {
+                                $('#district_id').append('<option>' + value + '</option>');
+                            }
+
+                        });
+                    }
+                })
+            } else {
+                $('#district_id').empty();
+                $('#district_id').append('<option>Select District</option>');
+            }
+        });
+    });
+     
+</script>
 @endsection

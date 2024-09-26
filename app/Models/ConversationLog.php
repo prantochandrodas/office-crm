@@ -11,10 +11,10 @@ class ConversationLog extends Model
     protected $fillable=['customer_id','project_id','note'];
 
     public function customer(){
-        return $this->belongsTo(customer::class,'customer_id');
+        return $this->belongsTo(Customer::class,'customer_id');
     }
 
     public function project(){
-        return $this->belongsTo(project::class,'project_id');
+        return $this->belongsTo(Project::class,'project_id');
     }
 }

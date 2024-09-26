@@ -73,16 +73,32 @@
             @csrf
             @method('PUT')
 
-             {{-- division_id field  --}}
-             <div class="form-group">
+            {{-- division_id field  --}}
+            <div class="form-group">
                 <label for="division_id" class="mb-2 fw-bold">Division:</label>
-                <select name="division_id" id="division_id" class="form-control">
+                <select name="division_id" id="division_id" class="form-control example select2">
                     <option>Select Division</option>
                     @foreach ($divisions as $item)
-                        <option value="{{ $item->id }}" {{$data->division_id == $item->id ?  "selected" : ''}}>{{ $item->name }}</option>
+                        <option value="{{ $item->id }}" {{ $data->division_id == $item->id ? 'selected' : '' }}>
+                            {{ $item->name }}</option>
                     @endforeach
                 </select>
-                @error('name')
+                @error('division_id')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- district_id field  --}}
+            <div class="form-group">
+                <label for="district_id" class="mb-2 fw-bold">District:</label>
+                <select name="district_id" id="district_id" class="form-control example2 select2">
+                    <option>Select District</option>
+                    @foreach ($districts as $item)
+                        <option value="{{ $item->id }}" {{ $data->district_id == $item->id ? 'selected' : '' }}>
+                            {{ $item->name }}</option>
+                    @endforeach
+                </select>
+                @error('district_id')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
@@ -97,8 +113,8 @@
                 @enderror
             </div>
 
-             <!-- description field -->
-             <div class="form-group">
+            <!-- description field -->
+            <div class="form-group">
                 <label for="description" class="mb-2 fw-bold">Description:</label>
                 <textarea type="text" name="description" id="description" cols="30" rows="3" class="form-control">{{ old('description', $data->description) }}</textarea>
                 @error('description')
@@ -111,4 +127,54 @@
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.example').select2();
+        $('.example2').select2();
+        let divisionId = "{{ $data->division_id }}"; // Get the default division_id from the server
+        let districtId = "{{ $data->district_id }}"; // Get the default district_id from the server
+        let districtDropdown = $('#district_id');
+
+        // Load districts for the default division_id when the page loads
+        if (divisionId) {
+            $.ajax({
+                url: '/get-district/' + divisionId,
+                type: 'GET',
+                success: function(data) {
+                    districtDropdown.empty(); // Clear the dropdown
+                    districtDropdown.append(
+                    '<option>Select District</option>'); // Add default option
+
+                    $.each(data, function(key, value) {
+                        let isSelected = (value.id == districtId) ? "selected" :
+                        ""; // Check if it's the selected district
+                        districtDropdown.append('<option value="' + value.id + '" ' +
+                            isSelected + '>' + value.name + '</option>');
+                    });
+                }
+            });
+        }
+
+        // Handle division selection change by the user
+        $('#division_id').on('change', function() {
+            divisionId = $(this).val();
+            districtDropdown.empty();
+            districtDropdown.append('<option>Select District</option>');
+
+            if (divisionId) {
+                $.ajax({
+                    url: '/get-district/' + divisionId,
+                    type: 'GET',
+                    success: function(data) {
+                        $.each(data, function(key, value) {
+                            districtDropdown.append('<option value="' + value.id +
+                                '">' + value.name + '</option>');
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
 @endsection

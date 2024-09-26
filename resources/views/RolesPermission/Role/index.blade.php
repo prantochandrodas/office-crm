@@ -15,7 +15,7 @@
     @endif
 
 @section('title')
-    Project Roles
+    Roles
 @endsection
 
 <!--begin::Toolbar-->
@@ -24,11 +24,11 @@
     <div id="kt_app_toolbar_container" class="container-fluid d-flex justify-content-between">
         <!--begin::Page title-->
         <div class="page-title">
-            <h1 class="page-heading text-dark fw-bold fs-3">Project Roles</h1>
+            <h1 class="page-heading text-dark fw-bold fs-3">Roles</h1>
             <!-- Breadcrumb -->
             <ul class="breadcrumb">
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('projectes') }}" class="text-muted text-hover-primary">Project</a>
+                    <a href="{{ route('role.index') }}" class="text-muted text-hover-primary">Role</a>
                 </li>
                 <li class="breadcrumb-item text-muted">Roles</li>
             </ul>
@@ -47,37 +47,39 @@
 <div id="kt_app_content" class="app-content flex-column-fluid">
     <!--begin::Content container-->
     <div class="container-fluid">
-        <div class="card shadow-sm">
+        <div class="card shadow-sm" style="background: #f8f9fa">
             <div class="card-header">
                 <h3 class="card-title">Manage Roles</h3>
             </div>
             <div class="card-body">
-                <table id="expensesTable" class="table table-striped table-bordered align-middle text-center">
+                <table id="expensesTable" class="table table-striped table-bordered  align-middle text-center">
                     <thead class="table-dark">
                         <tr>
                             <th>#</th>
-                            <th>User Role</th>
+                            <th>Role</th>
+                            <th>Permissions</th>
                             <th>Action</th>
-                            <th>Role Permission</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($Roles as $role)
+                        @foreach ($rolesWithPermissions as $roleData)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $role->name }}</td>
+                                <td>{{ $roleData['role']->name }}</td> <!-- Access role name correctly -->
+                                <td>
+                                    @foreach ($roleData['permissions'] as $item) <!-- Access permissions correctly -->
+                                         <span class="badge text-bg-success text-white m-1" style="text-transform: capitalize">{{ $item }}</span>
+                                    @endforeach
+                                </td>
                                 <td>
                                     <div class="d-flex justify-content-center">
-                                        <a href="{{ route('role.edit', $role->id) }}" class="btn btn-sm btn-primary me-2">Edit</a>
-                                        <form action="{{ route('role.distroy', $role->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                                        <a href="{{ route('role.edit', $roleData['role']->id) }}" class="btn btn-sm btn-primary me-2">Edit</a>
+                                        <form action="{{ route('role.distroy', $roleData['role']->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                                         </form>
                                     </div>
-                                </td>
-                                <td>
-                                    <a href="{{ route('role.add-permission', $role->id) }}" class="btn btn-sm btn-success">Manage Permissions</a>
                                 </td>
                             </tr>
                         @endforeach

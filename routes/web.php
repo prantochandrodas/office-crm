@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Backend\ContactClientController;
 use App\Http\Controllers\Backend\ConversationLogController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Backend\OurClientController;
 use App\Http\Controllers\Backend\PrimaryClientController;
 use App\Http\Controllers\Backend\ProjectController;
 use App\Http\Controllers\Backend\WantedClientController;
+use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PermissionController;
@@ -24,18 +26,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
-
-
+    
+    
     // Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
     // Route::get('permissions/create', [PermissionController::class, 'create'])->name('permissions.create');
     // Route::post('permissions/store', [PermissionController::class, 'store'])->name('permissions.store');
     // Route::get('permissions/edit/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
     // Route::put('permissions/update/{id}', [PermissionController::class, 'update'])->name('permissions.update');
     // Route::delete('permissions/distroy/{id}', [PermissionController::class, 'distroy'])->name('permissions.distroy');
+    
+    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
+    Route::get('application', [ApplicationController::class, 'index'])->name('applications.index');
+    Route::put('application/update/{id}', [ApplicationController::class, 'update'])->name('applications.update');
 
     Route::get('role', [RoleController::class, 'index'])->name('role.index');
     Route::get('role/create', [RoleController::class, 'create'])->name('role.create');
@@ -48,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('user', [UserController::class, 'indexPage'])->name('user.index');
+    Route::get('user/getdata', [UserController::class, 'getdata'])->name('user.getdata');
     Route::get('user/create', [UserController::class, 'create'])->name('user.create');
     Route::post('user/store', [UserController::class, 'store'])->name('user.store');
     Route::delete('user/distroy/{id}', [UserController::class, 'distroy'])->name('user.distroy');
@@ -127,6 +133,14 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/division/update/{id}', [DivisionController::class, 'update'])->name('divisions.update');
     Route::delete('/division/distroy/{id}', [DivisionController::class, 'distroy'])->name('divisions.distroy');
 
+    Route::get('/district', [DistrictController::class, 'index'])->name('districts');
+    Route::get('/district/create', [DistrictController::class, 'create'])->name('districts.create');
+    Route::get('/district/getdata', [DistrictController::class, 'getdata'])->name('districts.getdata');
+    Route::post('/district/store', [DistrictController::class, 'store'])->name('districts.store');
+    Route::get('/district/edit/{id}', [DistrictController::class, 'edit'])->name('districts.edit');
+    Route::put('/district/update/{id}', [DistrictController::class, 'update'])->name('districts.update');
+    Route::delete('/district/distroy/{id}', [DistrictController::class, 'distroy'])->name('districts.distroy');
+
     Route::get('/location', [LocationController::class, 'index'])->name('locations');
     Route::get('/location/create', [LocationController::class, 'create'])->name('locations.create');
     Route::get('/location/getdata', [LocationController::class, 'getdata'])->name('locations.getdata');
@@ -134,4 +148,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/location/edit/{id}', [LocationController::class, 'edit'])->name('locations.edit');
     Route::put('/location/update/{id}', [LocationController::class, 'update'])->name('locations.update');
     Route::delete('/location/distroy/{id}', [LocationController::class, 'distroy'])->name('locations.distroy');
+    Route::get('/get-district/{id}', [LocationController::class, 'getDistrict'])->name('locations.getDistrict');
 });
