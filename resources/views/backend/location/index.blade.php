@@ -72,8 +72,8 @@
             <thead>
                 <tr>
                     <th>Serial ID</th>
-                    <th>Division</th>
-                    <th>District</th>
+                    <th>Division Name</th>
+                    <th>District Name</th>
                     <th>Area</th>
                     <th>Description</th>
                     <th>Action</th>

@@ -64,7 +64,7 @@ District
           <tr>
               <th>Serial ID</th>
               <th>Division</th>
-              <th>Name</th>
+              <th>District Name</th>
               <th>Action</th>
           </tr>
       </thead>
