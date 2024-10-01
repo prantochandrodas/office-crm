@@ -65,6 +65,7 @@ Conversation-log
               <th>Serial ID</th>
               <th>Customer Name</th>
               <th>Project Name</th>
+              <th>Date</th>
               <th>Action</th>
           </tr>
       </thead>
@@ -110,6 +111,10 @@ Conversation-log
               {
                   data: 'project',
                   name: 'project'
+              },
+              {
+                data:'date',
+                name:'date'
               },
               {
                   data: 'action',

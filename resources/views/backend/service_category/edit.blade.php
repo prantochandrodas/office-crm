@@ -1,14 +1,24 @@
 @extends('layouts.backend')
-@section('content')
 
-    <!-- success message  -->
+@section('content')
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <!-- Success message  -->
     @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
 
-    <!-- error message  -->
+    <!-- Error message  -->
     @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
@@ -16,7 +26,7 @@
     @endif
 
 @section('title')
-    Division
+    Edit Service-category
 @endsection
 
 <!--begin::Toolbar-->
@@ -26,14 +36,14 @@
         <!--begin::Page title-->
         <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
             <!--begin::Title-->
-            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Division
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Edit Service-category
             </h1>
             <!--end::Title-->
             <!--begin::Breadcrumb-->
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1" style="padding: 0">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('divisions') }}" class="text-muted text-hover-primary">Division</a>
+                    <a href="{{ route('service-categories') }}" class="text-muted text-hover-primary">Service-category</a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
@@ -42,7 +52,7 @@
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-muted">Division</li>
+                <li class="breadcrumb-item text-muted">Edit Service-category</li>
                 <!--end::Item-->
             </ul>
             <!--end::Breadcrumb-->
@@ -55,33 +65,43 @@
 
 <div class="app-container container-fluid">
     <div style="background-color: #f0f0f0; padding: 20px;">
-        <h2 style="text-align: center;">Create Division</h2>
+        <h2 style="text-align: center;">Edit Service-category</h2>
     </div>
 
     <div style="background-color: #fff; padding: 20px; border: 1px solid #ccc;">
-        <form method="POST" action="{{ route('divisions.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('service-categories.update', $data->id) }}" enctype="multipart/form-data">
             @csrf
-            {{-- name field  --}}
+            @method('PUT')
+            <!-- Name field -->
             <div class="form-group">
-                <label for="name" class="mb-2 fw-bold">Division Name:</label>
-                <input type="text" class="form-control mb-2" id="name" name="name" placeholder="Division Name">
+                <label for="name" class="mb-2 fw-bold">Name:</label>
+                <input type="text" class="form-control mb-2" id="name" name="name"
+                    value="{{ old('name', $data->name) }}">
                 @error('name')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
 
-            {{-- description field  --}}
+            <!-- description field -->
             <div class="form-group">
                 <label for="description" class="mb-2 fw-bold">Description:</label>
-                <textarea name="description" id="description" cols="30" rows="3" class="form-control" placeholder="Description"></textarea>
+                <textarea type="text" name="description" id="description" cols="30" rows="3" class="form-control">{{ old('description', $data->description) }}</textarea>
                 @error('description')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
-
-            <button type="submit" class="btn btn-primary btn-sm mt-4">Create</button>
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-success btn-sm mt-4">Update</button>
         </form>
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.example').select2();
+        $('.example2').select2();
+       
+    });
+</script>
 @endsection

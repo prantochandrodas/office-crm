@@ -26,7 +26,7 @@
     @endif
 
 @section('title')
-    Edit Customer
+    Edit Division
 @endsection
 
 <!--begin::Toolbar-->
@@ -36,14 +36,14 @@
         <!--begin::Page title-->
         <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
             <!--begin::Title-->
-            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Edit Customer
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Edit Division
             </h1>
             <!--end::Title-->
             <!--begin::Breadcrumb-->
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1" style="padding: 0">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('customers') }}" class="text-muted text-hover-primary">Customer</a>
+                    <a href="{{ route('divisions') }}" class="text-muted text-hover-primary">Division</a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
@@ -52,7 +52,7 @@
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-muted">Edit Customer</li>
+                <li class="breadcrumb-item text-muted">Edit Division</li>
                 <!--end::Item-->
             </ul>
             <!--end::Breadcrumb-->
@@ -65,7 +65,7 @@
 
 <div class="app-container container-fluid">
     <div style="background-color: #f0f0f0; padding: 20px;">
-        <h2 style="text-align: center;">Edit Customer</h2>
+        <h2 style="text-align: center;">Edit Division</h2>
     </div>
 
     <div style="background-color: #fff; padding: 20px; border: 1px solid #ccc;">
@@ -94,7 +94,7 @@
             </div>
 
             <!-- Submit button -->
-            <button type="submit" class="btn btn-success mt-2">Update Division</button>
+            <button type="submit" class="btn btn-success mt-2 btn-sm">Update Division</button>
         </form>
     </div>
 </div>

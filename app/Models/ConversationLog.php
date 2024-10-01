@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ConversationLog extends Model
 {
     use HasFactory;
-    protected $fillable=['customer_id','project_id','note'];
+    protected $fillable=['customer_id','project_id','note','date'];
 
     public function customer(){
         return $this->belongsTo(Customer::class,'customer_id');

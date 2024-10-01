@@ -63,7 +63,7 @@
             @csrf
             @method('PUT')
             <div class="form-group mb-4">
-                <label for="division_id fw-bold">Division</label>
+                <label for="division_id" class="fw-bold mb-2">Division</label>
                 <select id="division_id" name="division_id" class="form-control example select2">
                     @foreach ($division as $item)
                         <option value="{{ $item->id }}"
@@ -83,7 +83,7 @@
             </div>
 
             <!-- Submit button -->
-            <button type="submit" class="btn btn-success mt-2">Update District</button>
+            <button type="submit" class="btn btn-success mt-2 btn-sm">Update District</button>
         </form>
     </div>
 </div>

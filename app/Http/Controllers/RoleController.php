@@ -11,33 +11,42 @@ class RoleController extends Controller
 {
     public function index()
     {
-        // Get all roles
-        $roles = Role::all();
+        if (auth()->check()) {
+            if (auth()->user()->can('role')) {
+                // Get all roles
+                $roles = Role::all();
 
-        // Initialize an array to hold roles with their permissions
-        $rolesWithPermissions = [];
+                // Initialize an array to hold roles with their permissions
+                $rolesWithPermissions = [];
 
-        foreach ($roles as $role) {
-            // Get permission IDs associated with the current role
-            $rolesPermissions = DB::table('role_has_permissions')
-                ->where('role_id', $role->id)
-                ->pluck('permission_id')
-                ->all();
+                foreach ($roles as $role) {
+                    // Get permission IDs associated with the current role
+                    $rolesPermissions = DB::table('role_has_permissions')
+                        ->where('role_id', $role->id)
+                        ->pluck('permission_id')
+                        ->all();
 
-            // Get permission names for those IDs
-            $permissionNames = DB::table('permissions')
-                ->whereIn('id', $rolesPermissions)
-                ->pluck('name')
-                ->all();
+                    // Get permission names for those IDs
+                    $permissionNames = DB::table('permissions')
+                        ->whereIn('id', $rolesPermissions)
+                        ->pluck('name')
+                        ->all();
 
-            // Store the role and its associated permission names
-            $rolesWithPermissions[] = [
-                'role' => $role,
-                'permissions' => $permissionNames,
-            ];
+                    // Store the role and its associated permission names
+                    $rolesWithPermissions[] = [
+                        'role' => $role,
+                        'permissions' => $permissionNames,
+                    ];
+                }
+
+                return view('RolesPermission.Role.index', compact('rolesWithPermissions'));
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to view and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
         }
-
-        return view('RolesPermission.Role.index', compact('rolesWithPermissions'));
     }
 
 
@@ -45,9 +54,17 @@ class RoleController extends Controller
 
     public function create()
     {
-        $permissions = Permission::all();
-
-        return view('RolesPermission.Role.create', compact('permissions'));
+        if (auth()->check()) {
+            if (auth()->user()->can('role-create')) {
+                $permissions = Permission::all();
+                return view('RolesPermission.Role.create', compact('permissions'));
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to create and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
+        }
     }
 
 
@@ -68,17 +85,26 @@ class RoleController extends Controller
 
     public function edit($id)
     {
-        $findData = Role::find($id);
-        $permissions = Permission::all(); // Get all permissions
-        $rolesPermissions = DB::table('role_has_permissions')
-            ->where('role_has_permissions.role_id', $id)
-            ->pluck('role_has_permissions.permission_id')
-            ->all(); // Pluck permission ids for the role
-        $rolesPermissionsNames = Permission::whereIn('id', $rolesPermissions)
-            ->pluck('name') // Adjust this if your column is named differently
-            ->all();
+        if (auth()->check()) {
+            if (auth()->user()->can('role-edit')) {
+                $findData = Role::find($id);
+                $permissions = Permission::all(); // Get all permissions
+                $rolesPermissions = DB::table('role_has_permissions')
+                    ->where('role_has_permissions.role_id', $id)
+                    ->pluck('role_has_permissions.permission_id')
+                    ->all(); // Pluck permission ids for the role
+                $rolesPermissionsNames = Permission::whereIn('id', $rolesPermissions)
+                    ->pluck('name') // Adjust this if your column is named differently
+                    ->all();
 
-        return view('RolesPermission.Role.edit', compact('findData', 'permissions', 'rolesPermissionsNames', 'rolesPermissions'));
+                return view('RolesPermission.Role.edit', compact('findData', 'permissions', 'rolesPermissionsNames', 'rolesPermissions'));
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to edit and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
+        }
     }
 
 
@@ -99,9 +125,18 @@ class RoleController extends Controller
 
     public function distroy($id)
     {
-        $find = Role::find($id);
-        $find->delete();
-        return redirect()->route('role.index')->with('success', 'Role Deleted Successully');
+        if (auth()->check()) {
+            if (auth()->user()->can('role-delete')) {
+                $find = Role::find($id);
+                $find->delete();
+                return redirect()->route('role.index')->with('success', 'Role Deleted Successully');
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to delete and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
+        }
     }
 
     public function addPermissionToRole($id)

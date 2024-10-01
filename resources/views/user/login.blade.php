@@ -62,8 +62,8 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header text-center">
-                        {{-- <img src="{{ asset('images/" height="100" alt="Application Logo"> --}}
-                        <p>Sign in to use backend</p>
+                        <img src="{{ asset('image/'.generalSetting()->logo)}}" height="100" alt="Application Logo">
+                        <p>Office Crm Signin</p>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('login') }}">

@@ -14,7 +14,7 @@
         </div>
     @endif
 @section('title')
-    Our-values
+    Project
 @endsection
 <!--begin::Toolbar-->
 <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
@@ -23,7 +23,7 @@
         <!--begin::Page title-->
         <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
             <!--begin::Title-->
-            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Our-values
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Project
             </h1>
             <!--end::Title-->
             <!--begin::Breadcrumb-->
@@ -39,7 +39,7 @@
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-muted">Our-values</li>
+                <li class="breadcrumb-item text-muted">Project</li>
                 <!--end::Item-->
             </ul>
             <!--end::Breadcrumb-->
@@ -52,16 +52,30 @@
 
 <div class="app-container container-fluid">
     <div style="background-color: #f0f0f0; padding: 20px;">
-        <h2 style="text-align: center;">Edit our-value</h2>
+        <h2 style="text-align: center;">Edit Project</h2>
     </div>
 
     <div style="background-color: #fff; padding: 20px; border: 1px solid #ccc;">
         <form method="POST" action="{{ route('projectes.update', $data->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+              {{-- service_category_id field  --}}
+            <div class="form-group mb-2">
+                <label for="service_category_id" class="mb-2 fw-bold">Service Category:</label>
+                <select name="service_category_id" id="service_category_id" class="form-control example select2">
+                    <option>Select Project Service</option>
+                    @foreach ($services as $item)
+                        <option value="{{ $item->id }}" {{$data->service_category_id == $item->id ? 'selected' : ''}}>{{ $item->name }}</option>
+                    @endforeach
+                </select>
+                @error('service_category_id')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+
             {{-- name field  --}}
             <div class="form-group">
-                <label for="name" class="mb-2 fs-5">Name:</label>
+                <label for="name" class="mb-2 fw-bold">Name:</label>
                 <input type="text" class="form-control mb-2" id="name" name="name"
                     value="{{ $data->name }}">
                 @error('name')
@@ -72,18 +86,28 @@
 
             {{-- Description field  --}}
             <div class="form-group">
-                <label for="description" class="mb-2 fs-5">Description:</label>
-                <textarea name="description" id="description" cols="30" rows="10" class="form-control">{{$data->description}}</textarea>
+                <label for="description" class="mb-2 fw-bold">Description:</label>
+                <textarea name="description" id="description" cols="30" rows="5" class="form-control">{{$data->description}}</textarea>
                 @error('description')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
             {{-- end description  --}}
 
+             {{-- technoligy field  --}}
+             <div class="form-group">
+                <label for="technoligy" class="mb-2 fw-bold">Technoligy:</label>
+                <textarea name="technoligy" id="technoligy" cols="30" rows="5" class="form-control">{{$data->technoligy}}</textarea>
+                @error('technoligy')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+            {{-- end technoligy  --}}
+
 
             {{-- image field  --}}
             <div class="form-group">
-                <label for="image" class="mb-2 fs-5">Image:</label>
+                <label for="image" class="mb-2 fw-bold">Image:</label>
                 <input type="file" class="form-control mb-2" id="image" name="image">
                 @error('image')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
@@ -98,4 +122,11 @@
         </form>
     </div>
 </div>
+
+<script>
+     $(document).ready(function() {
+        $('.example').select2();
+      
+    });
+</script>
 @endsection

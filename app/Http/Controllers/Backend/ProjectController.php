@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\District;
+use App\Models\Location;
 use App\Models\Project;
+use App\Models\ServiceCategory;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -11,23 +14,46 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        return view('backend.project.index');
+        if (auth()->check()) {
+            if (auth()->user()->can('project')) {
+                return view('backend.project.index');
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to view the project and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
+        }
     }
 
     public function getdata(Request $request)
     {
         if ($request->ajax()) {
-            $data = Project::orderBy('created_at', 'desc')->get();
+            $data = Project::with('service')->orderBy('created_at', 'desc')->get();
             return DataTables::of($data)
+                ->addColumn('service', function ($row) {
+                    return $row->service ? $row->service->name : 'N/A';
+                })
                 ->addColumn('action', function ($row) {
                     $editUrl = route('projectes.edit', $row->id);
                     $deleteUrl = route('projectes.distroy', $row->id);
                     $csrfToken = csrf_field();
                     $method = method_field('DELETE');
-                    $editBtn = '<a href="' . $editUrl . '" class="edit btn btn-success btn-sm me-2 rounded" style="padding:8px"><span>' .
-                        '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">' .
-                        '<g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z" fill="#ffffff"></path> </g></svg>' .
-                        '</span></a>';
+
+                    // Initialize action buttons
+                    $editBtn = '';
+                    $deleteBtn = '';
+
+                    // Check if the user has permission to edit
+                    if (auth()->user()->can('project-edit')) {
+                        $editBtn = '<a href="' . $editUrl . '" class="edit btn btn-success btn-sm me-2 rounded" style="padding:8px"><span>' .
+                            '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">' .
+                            '<g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z" fill="#ffffff"></path> </g></svg>' .
+                            '</span></a>';
+                    }
+
+                    // Check if the user has permission to delete
+                    if (auth()->user()->can('project-delete')) {
                         $deleteBtn = '<form action="' . $deleteUrl . '" method="POST">
                         ' . $csrfToken . '
                         ' . $method . '
@@ -37,7 +63,8 @@ class ProjectController extends Controller
                             </svg>
                         </button>
                     </form>';
-                    
+                    }
+
                     return $editBtn . ' ' . $deleteBtn;
                 })
                 ->rawColumns(['action'])
@@ -45,20 +72,33 @@ class ProjectController extends Controller
         }
     }
 
+
     public function create()
     {
-        return view('backend.project.create');
+        if (auth()->check()) {
+            if (auth()->user()->can('project-create')) {
+                $services = ServiceCategory::all();
+                return view('backend.project.create', compact('services'));
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to create and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
+        }
     }
 
     public function store(Request $request)
     {
-       
+
         $request->validate([
-            'name' => 'required|string',
+            'service_category_id' => 'nullable|exists:service_categories,id',
+            'name' => 'nullable|string',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
+            'technoligy' => 'nullable|string'
         ]);
-        $imagePath=null;
+        $imagePath = null;
         if ($request->has('image')) {
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();
@@ -68,29 +108,45 @@ class ProjectController extends Controller
             $imagePath = $fileName;
         }
         Project::create([
+            'service_category_id' => $request->service_category_id,
             'name' => $request->name,
             'image' => $imagePath,
-            'description' => $request->description
+            'description' => $request->description,
+            'technoligy' => $request->technoligy
         ]);
 
         return redirect()->route('projectes')->with('success', 'Data Created Successfull');
     }
 
-    public function edit($id){
-        $data=Project::FindOrFail($id);
-        return view('backend.project.edit',compact('data'));
+    public function edit($id)
+    {
+        if (auth()->check()) {
+            if (auth()->user()->can('project-edit')) {
+                $data = Project::FindOrFail($id);
+                $services = ServiceCategory::all();
+                return view('backend.project.edit', compact('data', 'services'));
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to edit and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
+        }
     }
 
-    public function update(Request $request,$id){
+    public function update(Request $request, $id)
+    {
         $request->validate([
+            'service_category_id' => 'nullable|exists:service_categories,id',
             'name' => 'nullable|string',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
+            'technoligy' => 'nullable|string'
         ]);
-        $data=Project::FindOrFail($id);
+        $data = Project::FindOrFail($id);
         if ($request->has('image')) {
-            $oldPath=('images/'.$data->image);
-            if(file_exists($oldPath)){
+            $oldPath = ('images/' . $data->image);
+            if (file_exists($oldPath)) {
                 unlink($oldPath);
             }
             $file = $request->file('image');
@@ -98,23 +154,47 @@ class ProjectController extends Controller
             $fileName = time() . '_' . rand(1, 100) . '.' . $extention;
             $path = 'images/';
             $file->move(public_path($path), $fileName);
-           $data->image=$fileName;
+            $data->image = $fileName;
         }
 
-        $data->name=$request->name;
-        $data->description=$request->description;
+        $data->name = $request->name;
+        $data->service_category_id = $request->service_category_id;
+        $data->description = $request->description;
+        $data->technoligy = $request->technoligy;
         $data->save();
         return redirect()->route('projectes')->with('success', 'Data Updated Successfull');
     }
 
-    public function distroy($id){
-        $data=Project::findOrFail($id);
-        $oldPath=('images/'.$data->image);
-        if(file_exists($oldPath)){
-            unlink($oldPath);
+    public function distroy($id)
+    {
+        if (auth()->check()) {
+            if (auth()->user()->can('project-delete')) {
+                $data = Project::findOrFail($id);
+                $oldPath = ('images/' . $data->image);
+                if (file_exists($oldPath)) {
+                    unlink($oldPath);
+                }
+                $data->delete();
+                return redirect()->route('projectes')->with('success', 'Data deleted successfull');
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to delete and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
         }
+    }
 
-        $data->delete();
-        return redirect()->route('projectes')->with('success','Data deleted successfull');
+    public function getDistricts($division_id)
+    {
+        $districts = District::where('division_id', $division_id)->get();
+        return response()->json($districts);
+    }
+
+    // Fetch locations based on district
+    public function getLocations($district_id)
+    {
+        $locations = Location::where('district_id', $district_id)->get();
+        return response()->json($locations);
     }
 }

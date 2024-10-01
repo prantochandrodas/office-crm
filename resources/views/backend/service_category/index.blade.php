@@ -15,7 +15,7 @@
     @endif
 
 @section('title')
-    Location
+    Service-Category
 @endsection
 
 <!--begin::Toolbar-->
@@ -25,14 +25,16 @@
         <!--begin::Page title-->
         <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
             <!--begin::Title-->
-            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Location
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
+                Service-Category
             </h1>
             <!--end::Title-->
             <!--begin::Breadcrumb-->
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('locations') }}" class="text-muted text-hover-primary">Location</a>
+                    <a href="{{ route('service-categories') }}"
+                        class="text-muted text-hover-primary">Service-Category</a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
@@ -41,7 +43,7 @@
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-muted">Location</li>
+                <li class="breadcrumb-item text-muted">Service-Category</li>
                 <!--end::Item-->
             </ul>
             <!--end::Breadcrumb-->
@@ -58,8 +60,8 @@
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-fluid">
         {{-- add button  --}}
-        @can('location-create')
-            <a href={{ route('locations.create') }} class="btn btn-sm btn-success mb-2"><svg viewBox="0 0 24 24"
+        @can('service-category-create')
+            <a href={{ route('service-categories.create') }} class="btn btn-sm btn-success mb-2"><svg viewBox="0 0 24 24"
                     fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height:20px">
                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -68,16 +70,15 @@
                             d="m3.99 16.854-1.314 3.504a.75.75 0 0 0 .966.965l3.503-1.314a3 3 0 0 0 1.068-.687L18.36 9.175s-.354-1.061-1.414-2.122c-1.06-1.06-2.122-1.414-2.122-1.414L4.677 15.786a3 3 0 0 0-.687 1.068zm12.249-12.63 1.383-1.383c.248-.248.579-.406.925-.348.487.08 1.232.322 1.934 1.025.703.703.945 1.447 1.025 1.934.058.346-.1.677-.348.925L19.774 7.76s-.353-1.06-1.414-2.12c-1.06-1.062-2.121-1.415-2.121-1.415z"
                             fill="#ffffff"></path>
                     </g>
-                </svg> Add Location</a>
+                </svg> Add Service-Category
+            </a>
         @endcan
 
         <table id="featuredProjectTitleHeading" class="display" style="width:100%">
             <thead>
                 <tr>
                     <th>Serial ID</th>
-                    <th>Division Name</th>
-                    <th>District Name</th>
-                    <th>Area</th>
+                    <th>Service Name</th>
                     <th>Description</th>
                     <th>Action</th>
                 </tr>
@@ -114,7 +115,7 @@
             $('#featuredProjectTitleHeading').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('locations.getdata') }}',
+                ajax: '{{ route('service-categories.getdata') }}',
                 columns: [{
                         data: null, // Use null to signify that this column does not map directly to any data source
                         name: 'serial_number',
@@ -124,14 +125,6 @@
                         },
                         orderable: false,
                         searchable: false
-                    },
-                    {
-                        data: 'division',
-                        name: 'division'
-                    },
-                    {
-                        data: 'district',
-                        name: 'district'
                     },
                     {
                         data: 'name',

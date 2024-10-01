@@ -42,7 +42,8 @@
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('contact-clients') }}" class="text-muted text-hover-primary">All-Contact-Client</a>
+                    <a href="{{ route('contact-clients') }}"
+                        class="text-muted text-hover-primary">All-Contact-Client</a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
@@ -73,16 +74,18 @@
             {{-- name field  --}}
             <div class="form-group">
                 <label for="name" class="mb-2 fw-bold">Contact Person:</label>
-                <input type="text" class="form-control mb-2" id="name" name="name" placeholder="Contact Person">
+                <input type="text" class="form-control mb-2" id="name" name="name"
+                    placeholder="Contact Person">
                 @error('name')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
 
-             {{-- company_name field  --}}
-             <div class="form-group">
+            {{-- company_name field  --}}
+            <div class="form-group">
                 <label for="company_name" class="mb-2 fw-bold">Company Name:</label>
-                <input type="text" class="form-control mb-2" id="company_name" name="company_name" placeholder="Company Name">
+                <input type="text" class="form-control mb-2" id="company_name" name="company_name"
+                    placeholder="Company Name">
                 @error('company_name')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
@@ -99,7 +102,8 @@
             {{-- phone field  --}}
             <div class="form-group">
                 <label for="phone" class="mb-2 fw-bold">Phone:</label>
-                <input type="number" class="form-control mb-2" id="phone" name="phone" placeholder="Phone Number">
+                <input type="number" class="form-control mb-2" id="phone" name="phone"
+                    placeholder="Phone Number">
                 @error('phone')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
@@ -107,7 +111,8 @@
             {{-- designation field  --}}
             <div class="form-group">
                 <label for="designation" class="mb-2 fw-bold">Designation:</label>
-                <input type="text" class="form-control mb-2" id="designation" name="designation" placeholder="Designation">
+                <input type="text" class="form-control mb-2" id="designation" name="designation"
+                    placeholder="Designation">
                 @error('designation')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
@@ -116,44 +121,73 @@
             {{-- address field  --}}
             <div class="form-group">
                 <label for="address" class="mb-2 fw-bold">Address:</label>
-                <textarea type="text" name="address" id="address" cols="30" rows="3" class="form-control" placeholder="Address"></textarea>
+                <textarea type="text" name="address" id="address" cols="30" rows="3" class="form-control"
+                    placeholder="Address"></textarea>
                 @error('address')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
-             {{-- note field  --}}
-             <div class="form-group">
+            {{-- note field  --}}
+            <div class="form-group">
                 <label for="note" class="mb-2 fw-bold">Note:</label>
-                <textarea type="text" name="note" id="note" cols="30" rows="3" class="form-control" placeholder="note"></textarea>
+                <textarea type="text" name="note" id="note" cols="30" rows="3" class="form-control"
+                    placeholder="note"></textarea>
                 @error('note')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
 
-            {{-- location_id field  --}}
-            <div class="form-group">
-                <label for="location_id" class="mb-2 fw-bold">Area</label>
-                <select name="location_id" id="location_id" class="form-control">
-                    <option>Select Area</option>
-                    @foreach ($locations as $item)
-                        <option value="{{$item->id}}">{{$item->name}}</option>    
-                    @endforeach
-                </select>
-                @error('location_id')
-                    <div class="alert alert-danger mt-2">{{ $message }}</div>
-                @enderror
+            {{-- division_id field  --}}
+            <div class="form-group row my-4">
+                <div class="col-md-4">
+                    <label for="division_id" class="mb-2 fw-bold">Divisions</label>
+                    <select name="division_id" id="division_id" class="form-control">
+                        <option>Select Divisions</option>
+                        @foreach ($divisions as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('division_id')
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-4">
+                    <label for="district_id" class="mb-2 fw-bold">District</label>
+                    <select name="district_id" id="district_id" class="form-control">
+                        <option>Select District</option>
+                    </select>
+                    @error('district_id')
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-4">
+                    <label for="location_id" class="mb-2 fw-bold">Area</label>
+                    <select name="location_id" id="location_id" class="form-control">
+                        <option>Select Area</option>
+                    </select>
+                    @error('location_id')
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
-            <div id="projects-container">
+
+            {{-- location_id field 
+            <div class="form-group">
+
+            </div> --}}
+            {{-- <div id="projects-container">
                 <div class="form-group project-group">
                     <div class="d-flex align-items-center justify-content-between my-2">
                         <label for="projects" class="mb-2 fw-bold">Assign Project:</label>
                         <button type="button" id="add-more" class="btn btn-success btn-sm mt-2">
-                            <svg style="width: 20px; height:20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg style="width: 20px; height:20px" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                 <g id="SVGRepo_iconCarrier">
                                     <g id="Edit / Add_Plus">
-                                        <path id="Vector" d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        <path id="Vector" d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="#ffffff"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                     </g>
                                 </g>
                             </svg> Add More
@@ -166,7 +200,42 @@
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
-                       
+
+                        <textarea name="notes[]" cols="30" rows="1" class="form-control" placeholder="Note"></textarea>
+                    </div>
+                </div>
+            </div> --}}
+
+            <div id="projects-container">
+                <div class="form-group project-group">
+                    <div class="d-flex align-items-center justify-content-between my-2">
+                        <label for="projects" class="mb-2 fw-bold">Assign Project:</label>
+                        <button type="button" id="add-more" class="btn btn-success btn-sm mt-2">
+                            <svg style="width: 20px; height:20px" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <g id="Edit / Add_Plus">
+                                        <path id="Vector" d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="#ffffff"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </g>
+                                </g>
+                            </svg> Add More
+                        </button>
+                    </div>
+                    <div class="d-flex">
+                        <select name="service_category[]" class="form-select me-2 service-category" aria-label="Select Service Category">
+                            <option value="">Select Service Category</option>
+                            @foreach ($serviceCategories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+            
+                        <select name="projects[]" class="form-select me-2 project-select" aria-label="Select Project">
+                            <option value="">Select Project</option>
+                        </select>
+            
                         <textarea name="notes[]" cols="30" rows="1" class="form-control" placeholder="Note"></textarea>
                     </div>
                 </div>
@@ -178,6 +247,65 @@
 </div>
 
 <script>
+    // document.getElementById('add-more').addEventListener('click', function() {
+    //     var container = document.getElementById('projects-container');
+    //     var newGroup = document.createElement('div');
+    //     newGroup.className = 'form-group project-group';
+    //     newGroup.innerHTML = `
+    //         <div class="d-flex align-items-center justify-content-end my-2">
+    //             <button type="button" class="btn btn-danger btn-sm remove-group">
+    //                 <svg style="width:20px; height:20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="Edit / Remove_Minus"> <path id="Vector" d="M6 12H18" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g> </g></svg> Remove
+    //             </button>
+    //         </div>
+    //         <div class="d-flex">
+    //             <select name="projects[]" class="form-select me-2" aria-label="Select Project">
+    //                 <option value="">Select Project</option>
+    //                 @foreach ($projects as $item)
+    //                     <option value="{{ $item->id }}">{{ $item->name }}</option>
+    //                 @endforeach
+    //             </select>
+    //             <textarea name="notes[]" cols="30" rows="1" class="form-control" placeholder="Note"></textarea>
+    //         </div>
+    //     `;
+    //     container.appendChild(newGroup);
+    // });
+
+    // document.getElementById('projects-container').addEventListener('click', function(e) {
+    //     if (e.target.classList.contains('remove-group')) {
+    //         e.target.closest('.project-group').remove();
+    //     }
+    // });
+
+    function loadProjects(selectElement, projectSelect) {
+        var serviceCategoryId = selectElement.value;
+        if (serviceCategoryId) {
+            // Make an Ajax request to fetch projects for the selected service category
+            fetch('/get-projects/' + serviceCategoryId)
+                .then(response => response.json())
+                .then(data => {
+                    projectSelect.innerHTML = '<option value="">Select Project</option>'; // Clear existing options
+                    data.forEach(project => {
+                        var option = document.createElement('option');
+                        option.value = project.id;
+                        option.textContent = project.name;
+                        projectSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching projects:', error));
+        } else {
+            projectSelect.innerHTML = '<option value="">Select Project</option>'; // Reset if no service category selected
+        }
+    }
+
+    // Add event listener to dynamically populate projects when service category changes
+    document.addEventListener('change', function(event) {
+        if (event.target.classList.contains('service-category')) {
+            var projectSelect = event.target.closest('.d-flex').querySelector('.project-select');
+            loadProjects(event.target, projectSelect);
+        }
+    });
+
+    // Add more button functionality
     document.getElementById('add-more').addEventListener('click', function() {
         var container = document.getElementById('projects-container');
         var newGroup = document.createElement('div');
@@ -189,29 +317,73 @@
                 </button>
             </div>
             <div class="d-flex">
-                <select name="projects[]" class="form-select me-2" aria-label="Select Project">
-                    <option value="">Select Project</option>
-                    @foreach ($projects as $item)
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                <select name="service_category[]" class="form-select me-2 service-category" aria-label="Select Service Category">
+                    <option value="">Select Service Category</option>
+                    @foreach ($serviceCategories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @endforeach
                 </select>
-                <select name="statuses[]" class="form-select me-2" aria-label="Select Status">
-                    <option value="">Select Status</option>
-                    <option value="interested">Interested</option>
-                    <option value="want-to-buy">Want To Buy</option>
-                    <option value="purchased">Purchased</option>
-                    <!-- Add other status options as needed -->
+
+                <select name="projects[]" class="form-select me-2 project-select" aria-label="Select Project">
+                    <option value="">Select Project</option>
                 </select>
+
                 <textarea name="notes[]" cols="30" rows="1" class="form-control" placeholder="Note"></textarea>
             </div>
         `;
         container.appendChild(newGroup);
     });
 
+    // Remove project group functionality
     document.getElementById('projects-container').addEventListener('click', function(e) {
         if (e.target.classList.contains('remove-group')) {
             e.target.closest('.project-group').remove();
         }
+    });
+
+    $(document).ready(function() {
+        // When Division changes, load Districts
+        $('#division_id').on('change', function() {
+            var division_id = $(this).val();
+            if (division_id) {
+                $.ajax({
+                    url: '/get-districts/' + division_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#district_id').empty();
+                        $('#district_id').append('<option value="">Select District</option>');
+                        $.each(data, function(key, value) {
+                            $('#district_id').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#district_id').empty();
+                $('#location').empty();
+            }
+        });
+
+        // When District changes, load Locations
+        $('#district_id').on('change', function() {
+            var district_id = $(this).val();
+            if (district_id) {
+                $.ajax({
+                    url: '/get-locations/' + district_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#location_id').empty();
+                        $('#location_id').append('<option value="">Select Location</option>');
+                        $.each(data, function(key, value) {
+                            $('#location_id').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#location_id').empty();
+            }
+        });
     });
 </script>
 @endsection

@@ -63,7 +63,7 @@
             @csrf
 
             {{-- division_id field  --}}
-            <div class="form-group">
+            <div class="form-group mb-4">
                 <label for="division_id" class="mb-2 fw-bold">Division:</label>
                 <select name="division_id" id="division_id" class="form-control example select2">
                     <option>Select Division</option>
@@ -77,7 +77,7 @@
             </div>
 
              {{-- district_id field  --}}
-             <div class="form-group">
+             <div class="form-group mb-4">
                 <label for="district_id" class="mb-2 fw-bold">District:</label>
                 <select name="district_id" id="district_id" class="form-control example2 select2">
                     <option>Select District</option>
@@ -87,9 +87,9 @@
                 @enderror
             </div>
             {{-- name field  --}}
-            <div class="form-group">
+            <div class="form-group mb-4">
                 <label for="name" class="mb-2 fw-bold">Area Name:</label>
-                <input type="text" class="form-control mb-2" id="name" name="name">
+                <input type="text" class="form-control mb-2" id="name" name="name" placeholder="Area Name">
                 @error('name')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
@@ -99,7 +99,7 @@
             {{-- description field  --}}
             <div class="form-group">
                 <label for="description" class="mb-2 fw-bold">Description:</label>
-                <textarea name="description" id="description" cols="30" rows="3" class="form-control"></textarea>
+                <textarea name="description" id="description" cols="30" rows="3" class="form-control" placeholder="Description"></textarea>
                 @error('description')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror

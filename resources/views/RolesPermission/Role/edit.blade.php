@@ -59,6 +59,8 @@
                         'dashboard' => [],
                         'client' => [],
                         'setting' => [],
+                        'send-email' => [],
+                        'send-sms' => [],
                         'application' => ['application-update'],
                         'project' => ['project-create', 'project-edit', 'project-delete'],
                         'division' => ['division-create', 'division-edit', 'division-delete'],
@@ -76,6 +78,18 @@
                         'conversation' => ['conversation-create', 'conversation-edit', 'conversation-delete'],
                         'user' => ['user-create', 'user-edit', 'user-delete'],
                         'role' => ['role-create', 'role-edit', 'role-delete'],
+                        'district' => ['district-create', 'district-edit', 'district-delete'],
+                        'service-category' => [
+                            'service-category-create',
+                            'service-category-edit',
+                            'service-category-delete',
+                        ],
+                        'service-category' => [
+                            'service-category-create',
+                            'service-category-edit',
+                            'service-category-delete',
+                        ],
+                        'our-client' => ['our-client-create', 'our-client-edit', 'our-client-delete'],
                     ];
                 @endphp
 

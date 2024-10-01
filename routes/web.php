@@ -12,12 +12,15 @@ use App\Http\Controllers\Backend\NonProspectiveClientController;
 use App\Http\Controllers\Backend\OurClientController;
 use App\Http\Controllers\Backend\PrimaryClientController;
 use App\Http\Controllers\Backend\ProjectController;
+use App\Http\Controllers\Backend\ServiceCategoryController;
 use App\Http\Controllers\Backend\WantedClientController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SmsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,15 +31,15 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
 Route::middleware(['auth'])->group(function () {
-    
-    
+
+
     // Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
     // Route::get('permissions/create', [PermissionController::class, 'create'])->name('permissions.create');
     // Route::post('permissions/store', [PermissionController::class, 'store'])->name('permissions.store');
     // Route::get('permissions/edit/{id}', [PermissionController::class, 'edit'])->name('permissions.edit');
     // Route::put('permissions/update/{id}', [PermissionController::class, 'update'])->name('permissions.update');
     // Route::delete('permissions/distroy/{id}', [PermissionController::class, 'distroy'])->name('permissions.distroy');
-    
+
     Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
     Route::get('application', [ApplicationController::class, 'index'])->name('applications.index');
@@ -69,7 +72,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/project/edit/{id}', [ProjectController::class, 'edit'])->name('projectes.edit');
     Route::put('/project/update/{id}', [ProjectController::class, 'update'])->name('projectes.update');
     Route::delete('/project/distroy/{id}', [ProjectController::class, 'distroy'])->name('projectes.distroy');
+    // Fetch districts based on division
+    Route::get('/get-districts/{division_id}', [ProjectController::class, 'getDistricts'])->name('get.districts');
+    Route::get('/get-locations/{district_id}', [ProjectController::class, 'getLocations'])->name('get.locations');
+    Route::post('/send-mail', [MailController::class, 'sendMail'])->name('send.mail');
+    Route::post('/send-sms', [SmsController::class, 'index'])->name('send.sms');
 
+    Route::get('/mail-client',[MailController::class,'index'])->name('mail-clients');
 
     Route::get('/primary-client', [CustomerController::class, 'index'])->name('primary-clients');
     Route::get('/primary-client/create', [CustomerController::class, 'create'])->name('primary-clients.create');
@@ -79,6 +88,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/primary-client/update/{id}', [CustomerController::class, 'update'])->name('primary-clients.update');
     Route::delete('/primary-client/distroy/{id}', [CustomerController::class, 'distroy'])->name('primary-clients.distroy');
     Route::get('/get-customer-data/{id}', [CustomerController::class, 'getCustomerData']);
+    Route::get('/get-projects/{serviceCategoryId}', [CustomerController::class, 'getProjects']);
+    Route::get('/get-client-email/{id}', [CustomerController::class, 'getClientEmail'])->name('get.client.email');
+    Route::get('/get-client/{id}', [CustomerController::class, 'getClient'])->name('get.client');
 
 
 
@@ -88,6 +100,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/contact-client/edit/{id}', [ContactClientController::class, 'edit'])->name('contact-clients.edit');
     Route::put('/contact-client/update/{id}', [ContactClientController::class, 'update'])->name('contact-clients.update');
     Route::delete('/contact-client/distroy/{id}', [ContactClientController::class, 'distroy'])->name('contact-clients.distroy');
+
+    Route::get('/service-category', [ServiceCategoryController::class, 'index'])->name('service-categories');
+    Route::get('/service-category/create', [ServiceCategoryController::class, 'create'])->name('service-categories.create');
+    Route::get('/service-category/getdata', [ServiceCategoryController::class, 'getdata'])->name('service-categories.getdata');
+    Route::post('/service-category/store', [ServiceCategoryController::class, 'store'])->name('service-categories.store');
+    Route::get('/service-category/edit/{id}', [ServiceCategoryController::class, 'edit'])->name('service-categories.edit');
+    Route::put('/service-category/update/{id}', [ServiceCategoryController::class, 'update'])->name('service-categories.update');
+    Route::delete('/service-category/distroy/{id}', [ServiceCategoryController::class, 'distroy'])->name('service-categories.distroy');
 
     Route::get('/non-prospective-client', [NonProspectiveClientController::class, 'index'])->name('non-prospective-clients');
     Route::get('/non-prospective-client/getdata', [NonProspectiveClientController::class, 'getdata'])->name('non-prospective-clients.getdata');

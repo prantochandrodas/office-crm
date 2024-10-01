@@ -63,7 +63,7 @@
             @csrf
 
             <div style="margin-bottom: 20px;">
-                <label for="division_id" style="display: block; margin-bottom: 5px;">Division:</label>
+                <label for="division_id" style="display: block; margin-bottom: 5px;" class="fw-bold">Division:</label>
                 <select id="division_id" name="division_id" class="form-control example select2" style="width: 100%;">
                     <option value="">Select Customer</option>
                     @foreach ($data as $item)

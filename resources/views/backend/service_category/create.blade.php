@@ -16,7 +16,7 @@
     @endif
 
 @section('title')
-    Division
+    Service-Category
 @endsection
 
 <!--begin::Toolbar-->
@@ -26,14 +26,14 @@
         <!--begin::Page title-->
         <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
             <!--begin::Title-->
-            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Division
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Service-Category
             </h1>
             <!--end::Title-->
             <!--begin::Breadcrumb-->
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1" style="padding: 0">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('divisions') }}" class="text-muted text-hover-primary">Division</a>
+                    <a href="{{ route('service-categories') }}" class="text-muted text-hover-primary">Service-Category</a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
@@ -42,7 +42,7 @@
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-muted">Division</li>
+                <li class="breadcrumb-item text-muted">Service-Category</li>
                 <!--end::Item-->
             </ul>
             <!--end::Breadcrumb-->
@@ -55,20 +55,23 @@
 
 <div class="app-container container-fluid">
     <div style="background-color: #f0f0f0; padding: 20px;">
-        <h2 style="text-align: center;">Create Division</h2>
+        <h2 style="text-align: center;">Create Service-Category</h2>
     </div>
 
     <div style="background-color: #fff; padding: 20px; border: 1px solid #ccc;">
-        <form method="POST" action="{{ route('divisions.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('service-categories.store') }}" enctype="multipart/form-data">
             @csrf
+
+           
             {{-- name field  --}}
             <div class="form-group">
-                <label for="name" class="mb-2 fw-bold">Division Name:</label>
-                <input type="text" class="form-control mb-2" id="name" name="name" placeholder="Division Name">
+                <label for="name" class="mb-2 fw-bold">Service Name:</label>
+                <input type="text" class="form-control mb-2" id="name" name="name" placeholder="Service Name">
                 @error('name')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
+
 
             {{-- description field  --}}
             <div class="form-group">
@@ -83,5 +86,4 @@
         </form>
     </div>
 </div>
-
 @endsection

@@ -9,8 +9,11 @@ use App\Models\ConversationLog;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\CustomerProject;
+use App\Models\District;
+use App\Models\Division;
 use App\Models\Location;
 use App\Models\Project;
+use App\Models\ServiceCategory;
 use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -19,8 +22,17 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        $customers = Customer::all();
-        return view('backend.customer.index', compact('customers'));
+        if (auth()->check()) {
+            if (auth()->user()->can('primary-client')) {
+                $customers = Customer::all();
+                return view('backend.customer.index', compact('customers'));
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to view and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
+        }
     }
 
 
@@ -30,48 +42,66 @@ class CustomerController extends Controller
             $data = Customer::where('status', 0)->orderBy('created_at', 'desc')->get();
             return DataTables::of($data)
                 ->addColumn('action', function ($row) {
+                    $editBtn = '';
+                    $deleteBtn = '';
+                    $addContactClient='';
+                    $addNonProspective='';
+
                     $editUrl = route('primary-clients.edit', $row->id);
                     $deleteUrl = route('primary-clients.distroy', $row->id);
                     $csrfToken = csrf_field();
                     $method = method_field('DELETE');
 
-                    $addContactClient = '<span data-id="' . $row->id . '" style="cursor:pointer; padding:10px; font-size:13px" class="add-contact-client badge rounded-pill text-bg-primary text-light ms-2">Add To Contact Client</span>';
+                    if (auth()->user()->can('add-to-contact-client')) {
+                        $addContactClient = '<span data-id="' . $row->id . '" style="cursor:pointer; padding:10px; font-size:13px" class="add-contact-client badge rounded-pill text-bg-primary text-light ms-2">Add To Contact Client</span>';
+                    }
+                    
+                    if (auth()->user()->can('add-to-non-prospective-client')) {
+                        $addNonProspective = '<span data-id="' . $row->id . '" style="cursor:pointer;padding:10px; font-size:13px" class="add-nonprospective badge rounded-pill text-bg-danger text-light ms-2">Add To Non Prospective</span>';
+                    }
+                    
 
-                    $addNonProspective = '<span data-id="' . $row->id . '" style="cursor:pointer;padding:10px; font-size:13px" class="add-nonprospective badge rounded-pill text-bg-danger text-light ms-2">Add To Non Prospective</span>';
-
-                    $addConversation = '<button class="btn btn-sm btn-primary ms-2 add-conversation" style="padding: 8px;" data-customer-id="' . $row->id . '"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <span>
-                    <svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#ffffff" style="width:20px; height:20px;">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <title>comment 3</title>
-                            <desc>Created with Sketch Beta.</desc>
-                            <defs></defs>
-                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-                                <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-207.000000, -257.000000)" fill="#ffffff">
-                                    <path d="M231,273 C229.896,273 229,272.104 229,271 C229,269.896 229.896,269 231,269 C232.104,269 233,269.896 233,271 C233,272.104 232.104,273 231,273 L231,273 Z M223,273 C221.896,273 221,272.104 221,271 C221,269.896 221.896,269 223,269 C224.104,269 225,269.896 225,271 C225,272.104 224.104,273 223,273 L223,273 Z M215,273 C213.896,273 213,272.104 213,271 C213,269.896 213.896,269 215,269 C216.104,269 217,269.896 217,271 C217,272.104 216.104,273 215,273 L215,273 Z M223,257 C214.164,257 207,263.269 207,271 C207,275.419 209.345,279.354 213,281.919 L213,289 L220.009,284.747 C220.979,284.907 221.977,285 223,285 C231.836,285 239,278.732 239,271 C239,263.269 231.836,257 223,257 L223,257 Z" id="comment-3" sketch:type="MSShapeGroup"></path>
+                    if (auth()->user()->can('conversation-create')) {
+                        $addConversation = '<button class="btn btn-sm btn-primary ms-2 add-conversation" style="padding: 8px;" data-customer-id="' . $row->id . '"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <span>
+                        <svg viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" fill="#ffffff" style="width:20px; height:20px;">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <title>comment 3</title>
+                                <desc>Created with Sketch Beta.</desc>
+                                <defs></defs>
+                                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                                    <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-207.000000, -257.000000)" fill="#ffffff">
+                                        <path d="M231,273 C229.896,273 229,272.104 229,271 C229,269.896 229.896,269 231,269 C232.104,269 233,269.896 233,271 C233,272.104 232.104,273 231,273 L231,273 Z M223,273 C221.896,273 221,272.104 221,271 C221,269.896 221.896,269 223,269 C224.104,269 225,269.896 225,271 C225,272.104 224.104,273 223,273 L223,273 Z M215,273 C213.896,273 213,272.104 213,271 C213,269.896 213.896,269 215,269 C216.104,269 217,269.896 217,271 C217,272.104 216.104,273 215,273 L215,273 Z M223,257 C214.164,257 207,263.269 207,271 C207,275.419 209.345,279.354 213,281.919 L213,289 L220.009,284.747 C220.979,284.907 221.977,285 223,285 C231.836,285 239,278.732 239,271 C239,263.269 231.836,257 223,257 L223,257 Z" id="comment-3" sketch:type="MSShapeGroup"></path>
+                                    </g>
                                 </g>
                             </g>
-                        </g>
-                    </svg>
-                    </span></button>';
+                        </svg>
+                        </span></button>';
+                    }
+                    
 
 
+                    if (auth()->user()->can('primary-client-edit')) {
+                        $editBtn = '<a href="' . $editUrl . '" class="edit btn btn-sm btn-success me-2 rounded" style="padding:8px;"><span>' .
+                            '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">' .
+                            '<g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z" fill="#ffffff"></path> </g></svg>' .
+                            '</span></a>';
+                    }
 
-                    $editBtn = '<a href="' . $editUrl . '" class="edit btn btn-sm btn-success me-2 rounded" style="padding:8px;"><span>' .
-                        '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">' .
-                        '<g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z" fill="#ffffff"></path> </g></svg>' .
-                        '</span></a>';
-                    $deleteBtn = '<form action="' . $deleteUrl . '" method="POST">
+                    if (auth()->user()->can('primary-client-delete')) {
+                        $deleteBtn = '<form action="' . $deleteUrl . '" method="POST">
                     ' . $csrfToken . '
                     ' . $method . '
-                    <button type="submit" class="delete btn btn-danger btn-sm" style="padding:8px;">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
-                                <path d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                            </svg>
-                            </button>
-                </form>';
+                                <button type="submit" class="delete btn btn-danger btn-sm" style="padding:8px;">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
+                                            <path d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                        </button>
+                            </form>';
+                    }
+
                     return '<div class="d-flex align-items-center justify-content-center mb-2">'
                         . $editBtn . $deleteBtn . $addConversation .
                         '</div>'
@@ -86,11 +116,32 @@ class CustomerController extends Controller
         }
     }
 
+
+    public function getProjects($serviceCategoryId)
+    {
+        // Fetch projects based on the selected service category
+        $projects = Project::where('service_category_id', $serviceCategoryId)->get();
+
+        // Return the projects as a JSON response
+        return response()->json($projects);
+    }
+
     public function create()
     {
-        $projects = Project::all();
-        $locations = Location::all();
-        return view('backend.customer.create', compact('projects', 'locations'));
+        if (auth()->check()) {
+            if (auth()->user()->can('primary-client-create')) {
+                $divisions = Division::all();
+                $projects = Project::all();
+                $locations = Location::all();
+                $serviceCategories = ServiceCategory::all();
+                return view('backend.customer.create', compact('projects', 'locations', 'divisions', 'serviceCategories'));
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to create and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
+        }
     }
 
 
@@ -155,13 +206,32 @@ class CustomerController extends Controller
 
     public function edit($id)
     {
-        // Fetch the customer with their associated projects
-        $customer = Customer::with('projects')->findOrFail($id);
-        $locations = Location::all();
+        if (auth()->check()) {
+            if (auth()->user()->can('primary-client-edit')) {
+                $customer = Customer::with('projects')->findOrFail($id);
+                $locations = Location::all();
+                $divisions = Division::all();
+                $location = Location::find($customer->location_id);
+                $selectedDivisionId = $location->division_id; // Assuming district belongs to division
+                $selectedDistrictId = $location->district_id;
+                $selectedLocationId = $location->id;
 
-        // Fetch all available projects
-        $projects = Project::all();
-        return view('backend.customer.edit', compact('customer', 'projects', 'locations'));
+                // Load districts based on the selected division
+                $districts = District::where('division_id', $selectedDivisionId)->get();
+
+                // Load locations based on the selected district
+                $locations = Location::where('district_id', $selectedDistrictId)->get();
+                // Fetch all available projects
+                $projects = Project::all();
+                $serviceCategory = ServiceCategory::all();
+                return view('backend.customer.edit', compact('customer', 'projects', 'locations', 'divisions', 'districts', 'locations', 'selectedDivisionId', 'selectedDistrictId', 'selectedLocationId', 'serviceCategory'));
+            } else {
+                auth()->logout(); // Log out the user
+                return redirect()->route('login')->with('error', 'You do not have permission to edit and have been logged out.');
+            }
+        } else {
+            return redirect()->back()->with('error', 'You need to login first.');
+        }
     }
 
 
@@ -244,13 +314,10 @@ class CustomerController extends Controller
 
     public function distroy($id)
     {
-        // Find the customer by ID
         $customer = Customer::findOrFail($id);
-        // Delete associated projects
         CustomerProject::where('customer_id', $customer->id)->delete();
-        // Delete the customer
+        ConversationLog::where('customer_id', $customer->id)->delete();
         $customer->delete();
-        // Redirect back with success message
         return redirect()->route('primary-clients')->with('success', 'Customer deleted successfully');
     }
 
@@ -272,7 +339,7 @@ class CustomerController extends Controller
     public function getCustomerData($id)
     {
         $customer = Customer::find($id);
-        $projects = $customer->demo;// Fetch all projects, or filter as needed
+        $projects = $customer->demo; // Fetch all projects, or filter as needed
         // $conversationLogs = ConversationLog::where('customer_id', $customer->id)
         // ->whereIn('project_id', $projects->pluck('id'))
         // ->first(); 
@@ -282,4 +349,32 @@ class CustomerController extends Controller
             'projects' => $projects,
         ]);
     }
+
+    // ClientController.php
+    public function getClientEmail($id)
+    {
+        // Find the client by ID
+        $client = Customer::find($id);
+
+        // Return the email if the client exists, otherwise return null
+        if ($client) {
+            return response()->json(['email' => $client->email, 'phone' => $client->phone]);
+        } else {
+            return response()->json(['email' => null, 'phone' => null]);
+        }
+    }
+    public function getClient($id)
+    {
+        // Find the client by ID
+        $client = Customer::where('status',$id)->get();
+
+        // Return the email if the client exists, otherwise return null
+        if ($client) {
+            return response()->json(['client' => $client]);
+        } else {
+            return response()->json(['client' => null]);
+        }
+    }
+
+
 }

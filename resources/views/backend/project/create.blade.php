@@ -15,7 +15,7 @@
     @endif
 
 @section('title')
-Project
+    Project
 @endsection
 
 
@@ -61,20 +61,47 @@ Project
     <div style="background-color: #fff; padding: 20px; border: 1px solid #ccc;">
         <form method="POST" action="{{ route('projectes.store') }}" enctype="multipart/form-data">
             @csrf
-             {{-- name field  --}}
-             <div class="form-group">
-                <label for="name" class="mb-2 fs-5">Name:</label>
-                <input type="text" class="form-control mb-2" id="name" name="name">
+            {{-- service_category_id field  --}}
+            <div class="form-group mb-2">
+                <label for="service_category_id" class="mb-2 fw-bold">Service Category:</label>
+                <select name="service_category_id" id="service_category_id" class="form-control">
+                    <option>Select Project Service</option>
+                    @foreach ($services as $item)
+                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                    @endforeach
+                </select>
+                @error('service_category_id')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- name field  --}}
+            <div class="form-group mb-2">
+                <label for="name" class="mb-2 fw-bold">Project Name:</label>
+                <input type="text" class="form-control mb-2" id="name" name="name"
+                    placeholder="Project Name">
                 @error('name')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
             </div>
-            {{-- end link  --}}
+            {{-- end name  --}}
+
+            {{-- technoligy field  --}}
+            <div class="form-group mb-2">
+                <label for="technoligy" class="mb-2 fw-bold">Technoligy:</label>
+                <textarea name="technoligy" id="technoligy" cols="30" rows="5" class="form-control"
+                    placeholder="Project technoligy"></textarea>
+                @error('technoligy')
+                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                @enderror
+            </div>
+            {{-- end description  --}}
 
             {{-- Description field  --}}
-            <div class="form-group">
-                <label for="description" class="mb-2 fs-5">Description:</label>
-                <textarea name="description" id="description" cols="30" rows="10" class="form-control"></textarea>
+            <div class="form-group mb-2">
+                <label for="description" class="mb-2 fw-bold">Description:</label>
+                <textarea name="description" id="description" cols="30" rows="5" class="form-control"
+                    placeholder="Project Description"></textarea>
                 @error('description')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                 @enderror
@@ -83,8 +110,8 @@ Project
 
 
             {{-- image field  --}}
-            <div class="form-group">
-                <label for="image" class="mb-2 fs-5">Image:</label>
+            <div class="form-group mb-2">
+                <label for="image" class="mb-2 fw-bold">Image:</label>
                 <input type="file" class="form-control mb-2" id="image" name="image">
                 @error('image')
                     <div class="alert alert-danger mt-2">{{ $message }}</div>
