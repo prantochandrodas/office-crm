@@ -58,6 +58,90 @@
 <div id="kt_app_content" class="app-content flex-column-fluid">
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-fluid">
+
+
+
+        <div class="card" style="margin-bottom: 50px">
+            <div class="row input-daterange" style="margin-top: 40px">
+
+                <div id="" class="col-md-4">
+                    <div class="form-group">
+                        <label for="category_id"><b>Client Status</b></label>
+                        <select id="category_id" class="form-control chosen-select" style="width: 100%">
+                            <option value="">--Select Status--</option>
+                            <option value="">Contact-client</option>
+                            <option value="">Wanted-client</option>
+                            <option value="">Our-client</option>
+                            <option value="">Non-prospective-client</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="" class="col-md-4">
+                    <div class="form-group">
+                        <label for="division_id"><b>Divisions</b></label>
+                        <select id="division_id" class="form-control" name="division_id" required>
+                            <option value="">--Select Divisions--</option>
+                            @foreach ($divisions as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div id="" class="col-md-4">
+                    <div class="form-group">
+                        <label for="district_id"><b>District</b></label>
+                        <select id="district_id" class="form-control" name="district_id" required>
+                            <option value="">--Select District--</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="" class="col-md-4">
+                    <div class="form-group">
+                        <label for="location_id"><b>Area</b></label>
+                        <select id="location_id" class="form-control" name="location_id" required>
+                            <option value="">--Select Area--</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="" class="col-md-4">
+                    <div class="form-group">
+                        <label for="service_category"><b>Service Category</b></label>
+                        <select id="service_category" class="form-control" name="service_category" required>
+                            <option value="">--Select Service Catebgory--</option>
+                            @foreach ($serviceCategories as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div id="" class="col-md-4">
+                    <div class="form-group">
+                        <label for="project_id"><b>Project</b></label>
+                        <select id="project_id" class="form-control" name="project_id" required>
+                            <option value="">--Select Area--</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2" style="margin-top: 20px">
+                    <button type="button" name="filter" id="filter" class="btn btn-success" style="padding: 6px;">
+                        <img src="{{ asset('assets/backend/assets/icon/search.svg') }}" alt="Search"
+                            style="height: 20px; width: 20px;">
+                    </button>
+                    <button type="button" name="print" id="printBtn" onclick="printPage()" class="btn btn-primary"
+                        style="padding: 6px;">
+                        <img src="{{ asset('assets/backend/assets/icon/printer.svg') }}" alt="Printer"
+                            style="height: 20px; width: 20px;">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
         {{-- add button  --}}
         @can('primary-client-create')
             <a href={{ route('primary-clients.create') }} class="btn btn-sm btn-success mb-2"><svg viewBox="0 0 24 24"
@@ -85,7 +169,8 @@
                         <desc>Created with Sketch.</desc>
                         <defs></defs>
                         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <g id="Dribbble-Light-Preview" transform="translate(-340.000000, -922.000000)" fill="#ffffff">
+                            <g id="Dribbble-Light-Preview" transform="translate(-340.000000, -922.000000)"
+                                fill="#ffffff">
                                 <g id="icons" transform="translate(56.000000, 160.000000)">
                                     <path
                                         d="M294,774.474 L284,765.649 L284,777 L304,777 L304,765.649 L294,774.474 Z M294.001,771.812 L284,762.981 L284,762 L304,762 L304,762.981 L294.001,771.812 Z"
@@ -130,187 +215,21 @@
         </table>
     </div>
 
-    <div class="modal fade" id="smsModal" tabindex="-1" aria-labelledby="smsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="smsModalLabel">Send Sms</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Your form or content goes here -->
-                    <form id="smsForm" method="POST" action="{{ route('send.sms') }}">
-                        @csrf
+    @include('backend.customer.sms_modal')
 
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Client name</label>
-                            <select name="client_name_sms" id="client_name_sms" class="form-control smsExample select2">
-                                <option>Select Client</option>
-                                @foreach ($customers as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Client Phone Number</label>
-                            <input type="phone" class="form-control" id="phone" name="phone" required
-                                placeholder="Client phone">
-                        </div>
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" id="message" name="message" rows="3" required placeholder="Message"></textarea>
-                        </div>
+    @include('backend.customer.mail_modal')
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btn-sm d-flex align-items-center"
-                                data-bs-dismiss="modal">
-                                <svg style="width: 20px; height:20px" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                    <g id="SVGRepo_iconCarrier">
-                                        <path opacity="0.5"
-                                            d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                            fill="#1C274C"></path>
-                                        <path
-                                            d="M8.96967 8.96967C9.26256 8.67678 9.73744 8.67678 10.0303 8.96967L12 10.9394L13.9697 8.96969C14.2626 8.6768 14.7374 8.6768 15.0303 8.96969C15.3232 9.26258 15.3232 9.73746 15.0303 10.0304L13.0607 12L15.0303 13.9696C15.3232 14.2625 15.3232 14.7374 15.0303 15.0303C14.7374 15.3232 14.2625 15.3232 13.9696 15.0303L12 13.0607L10.0304 15.0303C9.73746 15.3232 9.26258 15.3232 8.96969 15.0303C8.6768 14.7374 8.6768 14.2626 8.96969 13.9697L10.9394 12L8.96967 10.0303C8.67678 9.73744 8.67678 9.26256 8.96967 8.96967Z"
-                                            fill="#1C274C"></path>
-                                    </g>
-                                </svg> Close
-                            </button>
-                            <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center">
-                                <svg style="width: 18px; height:18px; margin-right:5px;"
-                                    xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 24 24"
-                                    stroke="#ffffff">
-                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                    <g id="SVGRepo_iconCarrier">
-                                        <path
-                                            d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z">
-                                        </path>
-                                    </g>
-                                </svg> Send Sms
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    @include('backend.customer.conversation_modal')
+
+    @include('backend.customer.view_conversation_modal')
+
+    <!-- Loading Spinner and Backdrop -->
+    <div id="loading" style="display: none;">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
     </div>
-
-    <!-- Mail Modal  -->
-    <div class="modal fade" id="mailModal" tabindex="-1" aria-labelledby="mailModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="mailModalLabel">Send Mail</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Your form or content goes here -->
-                    <form id="mailForm" method="POST" action="{{ route('send.mail') }}">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Client name</label>
-                            <select name="client_name" id="client_name" class="form-control example ">
-                                <option>Select Client</option>
-                                @foreach ($customers as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="subject" class="form-label">Mail Subject</label>
-                            <input type="text" class="form-control" id="subject" name="subject" required
-                                placeholder="Mail subject">
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Client Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required
-                                placeholder="Client Email">
-                        </div>
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" id="message" name="message" rows="3" required placeholder="Message"></textarea>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary btn-sm d-flex align-items-center"
-                                data-bs-dismiss="modal">
-                                <svg style="width: 20px; height:20px" viewBox="0 0 24 24" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                    <g id="SVGRepo_iconCarrier">
-                                        <path opacity="0.5"
-                                            d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                                            fill="#1C274C"></path>
-                                        <path
-                                            d="M8.96967 8.96967C9.26256 8.67678 9.73744 8.67678 10.0303 8.96967L12 10.9394L13.9697 8.96969C14.2626 8.6768 14.7374 8.6768 15.0303 8.96969C15.3232 9.26258 15.3232 9.73746 15.0303 10.0304L13.0607 12L15.0303 13.9696C15.3232 14.2625 15.3232 14.7374 15.0303 15.0303C14.7374 15.3232 14.2625 15.3232 13.9696 15.0303L12 13.0607L10.0304 15.0303C9.73746 15.3232 9.26258 15.3232 8.96969 15.0303C8.6768 14.7374 8.6768 14.2626 8.96969 13.9697L10.9394 12L8.96967 10.0303C8.67678 9.73744 8.67678 9.26256 8.96967 8.96967Z"
-                                            fill="#1C274C"></path>
-                                    </g>
-                                </svg> Close
-                            </button>
-                            <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center">
-                                <i class="fas fa-envelope"></i> Send Mail
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
-    {{-- modal  --}}
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Conversation</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="{{ route('conversation-logs.store') }}"
-                        enctype="multipart/form-data" id="conversationLogForm">
-                        @csrf
-                        {{-- <div class="form-group">
-                            <label for="modal_customer_id">Customer Name:</label>
-                            <select id="modal_customer_id" name="customer_id" class="form-control example select2" {{ count($customers) == 1 ? 'readonly' : '' }} disabled>
-                                <option value="">Select Customer</option>
-                                @foreach ($customers as $item)
-                                    <option value="{{ $item->id }}" {{ count($customers) == 1 ? 'selected' : '' }}>
-                                        {{ $item->name }} ({{ $item->phone }})
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div> --}}
-                        <input type="hidden" name="customer_id" id="modal_customer_id_hidden" value="">
-                        <div class="form-group">
-                            <label for="modal_project_id" class="mb-2 fw-bold">Select Project:</label>
-                            <select id="modal_project_id" name="project_id" class="form-control">
-                                <option value="">Select Project</option>
-                            </select>
-                        </div>
-                        <div class="form-group my-4">
-                            <label for="modal_note" class="mb-2 fw-bold">Note:</label>
-                            <textarea name="note" id="modal_note" cols="30" rows="3" class="form-control"
-                                placeholder="Write Conversation"></textarea>
-                        </div>
-                        <div class="form-group my-4">
-                            <label for="modal_date" class="mb-2 fw-bold">Date:</label>
-                            <input type="date" class="form-control" name="date">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-sm">Create</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <div id="backdrop" style="display: none;"></div>
 
 
     <!-- Custom CSS for Table Borders -->
@@ -336,16 +255,97 @@
             padding: 10px;
             /* Optional: add some padding for a cleaner look */
         }
-        .select2-container{
+
+        .select2-container {
             display: block;
         }
-
-        
     </style>
 
 
     <script>
         $(document).ready(function() {
+
+            $(document).on('change', '#division_id', function() {
+                let divisionId = $(this).val();
+                let district = $(this).find('#district_id');
+                if (divisionId) {
+                    $.ajax({
+                        url: '/get-district/' + divisionId,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#district_id').empty();
+                            $('#district_id').append('<option>--Select District--</option>');
+                            $.each(data, function(key, value) {
+                                if (data.length > 0) {
+                                    $('#district_id').append('<option value="' + value
+                                        .id +
+                                        '">' + value.name + '</option>');
+                                } else {
+                                    $('#district_id').append('<option>' + value +
+                                        '</option>');
+                                }
+
+                            });
+                        }
+                    })
+                } else {
+                    $('#district_id').empty();
+                    $('#district_id').append('<option>Select District</option>');
+                }
+            });
+
+            $(document).on('change', '#service_category', function() {
+                let divisionId = $(this).val();
+                let district = $(this).find('#project_id');
+                if (divisionId) {
+                    $.ajax({
+                        url: '/get-projects/' + divisionId,
+                        type: 'GET',
+                        success: function(data) {
+                            $('#project_id').empty();
+                            $('#project_id').append('<option>--Select Project--</option>');
+                            $.each(data, function(key, value) {
+                                if (data.length > 0) {
+                                    $('#project_id').append('<option value="' + value
+                                        .id +
+                                        '">' + value.name + '</option>');
+                                } else {
+                                    $('#project_id').append('<option>' + value +
+                                        '</option>');
+                                }
+
+                            });
+                        }
+                    })
+                } else {
+                    $('#project_id').empty();
+                    $('#project_id').append('<option>Select District</option>');
+                }
+            });
+            // When District changes, load Locations
+            $('#district_id').on('change', function() {
+                var district_id = $(this).val();
+                if (district_id) {
+                    $.ajax({
+                        url: '/get-locations/' + district_id,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#location_id').empty();
+                            $('#location_id').append(
+                                '<option value="">--Select Area--</option>');
+                            $.each(data, function(key, value) {
+                                $('#location_id').append('<option value="' + value.id +
+                                    '">' + value.name + '</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#location_id').empty();
+                }
+            });
+
+
             $('#mailModal').on('hidden.bs.modal', function() {
                 $('#mailForm')[0].reset(); // Reset the form fields
             });
@@ -412,7 +412,7 @@
             // Handle client selection change
             $('#client_name').on('change', function() {
                 var clientId = $(this).val(); // Get the selected client ID
-                
+
                 // If a client is selected (not default "Select Client")
                 if (clientId) {
                     // Make an AJAX request to fetch the email
@@ -467,7 +467,55 @@
                     $('#phone').val('');
                 }
             });
+
+            // Handle form submission
+            $('form').on('submit', function() {
+                // Show loading spinner
+                $('#loading').show();
+                $('#backdrop').show(); // Show backdrop when loading
+            });
         });
+
+
+        $(document).on('click', '.view-conversation', function() {
+            var customerId = $(this).data('customer-id');
+
+            $.ajax({
+                url: '/get-customer-data/' + customerId,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response); // Check the response structure
+
+                    // Assuming response contains an array of conversationLogs
+                    var conversationLogs = response.conversationLogs;
+
+                    // Clear existing rows in the table body
+                    $('#conversationLogsTableBody').empty();
+
+                    // Iterate over conversationLogs array and append rows to the table
+                    $.each(conversationLogs, function(index, log) {
+                        console.log(log.project);
+                        // Assuming log has customer_name, project_name, note, and date
+                        var row = `<tr>
+                            <td>${log.customer.name}</td>
+                            <td>${log.project.name}</td>
+                            <td>${log.note}</td>
+                            <td>${log.date}</td>
+                        </tr>`;
+
+                        // Append the row to the table body
+                        $('#conversationLogsTableBody').append(row);
+                    });
+
+                    // Show the modal after data is populated
+                    $('#viewConversationdrop').modal('show');
+                },
+                error: function(xhr) {
+                    toastr.error('Error fetching conversation logs');
+                }
+            });
+        });
+
 
 
         $(document).on('click', '.add-contact-client', function() {

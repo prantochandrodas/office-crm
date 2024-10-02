@@ -75,10 +75,15 @@ Route::middleware(['auth'])->group(function () {
     // Fetch districts based on division
     Route::get('/get-districts/{division_id}', [ProjectController::class, 'getDistricts'])->name('get.districts');
     Route::get('/get-locations/{district_id}', [ProjectController::class, 'getLocations'])->name('get.locations');
-    Route::post('/send-mail', [MailController::class, 'sendMail'])->name('send.mail');
-    Route::post('/send-sms', [SmsController::class, 'index'])->name('send.sms');
-
-    Route::get('/mail-client',[MailController::class,'index'])->name('mail-clients');
+ 
+    Route::post('/mail-client', [MailController::class, 'sendMail'])->name('mail.client');
+    Route::get('/send-mail',[MailController::class,'index'])->name('send-mail');
+    Route::post('/send-mail/multipleMail', [MailController::class, 'multipleMail'])->name('send.multipleMail');
+    
+    
+    Route::get('/send-sms', [SmsController::class, 'index'])->name('send.sms');
+    Route::post('/sms-client', [SmsController::class, 'sendSms'])->name('sms-clients');
+    Route::post('/send-mail/multipleSms', [SmsController::class, 'multipleSms'])->name('send.multipleSms');
 
     Route::get('/primary-client', [CustomerController::class, 'index'])->name('primary-clients');
     Route::get('/primary-client/create', [CustomerController::class, 'create'])->name('primary-clients.create');

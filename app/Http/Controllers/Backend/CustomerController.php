@@ -25,7 +25,9 @@ class CustomerController extends Controller
         if (auth()->check()) {
             if (auth()->user()->can('primary-client')) {
                 $customers = Customer::all();
-                return view('backend.customer.index', compact('customers'));
+                $divisions=Division::all();
+                $serviceCategories=ServiceCategory::all();
+                return view('backend.customer.index', compact('customers','divisions','serviceCategories'));
             } else {
                 auth()->logout(); // Log out the user
                 return redirect()->route('login')->with('error', 'You do not have permission to view and have been logged out.');
@@ -80,6 +82,11 @@ class CustomerController extends Controller
                         </svg>
                         </span></button>';
                     }
+
+                    $viewConversation = '<button class="btn btn-sm ms-2 view-conversation" style="padding: 8px; background-color:#6c757d" data-customer-id="' . $row->id . '"  data-bs-toggle="modal" data-bs-target="#viewConversationdrop">
+                    <span>
+                    <i class="fa fa-eye text-light"></i>
+                    </span></button>';
                     
 
 
@@ -103,7 +110,7 @@ class CustomerController extends Controller
                     }
 
                     return '<div class="d-flex align-items-center justify-content-center mb-2">'
-                        . $editBtn . $deleteBtn . $addConversation .
+                        . $editBtn . $deleteBtn . $addConversation . $viewConversation .
                         '</div>'
                         . '<div class="mt-2 d-flex align-items-center justify-content-center">'
                         . $addContactClient  .
@@ -340,13 +347,12 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $projects = $customer->demo; // Fetch all projects, or filter as needed
-        // $conversationLogs = ConversationLog::where('customer_id', $customer->id)
-        // ->whereIn('project_id', $projects->pluck('id'))
-        // ->first(); 
+        $conversationLogs = ConversationLog::where('customer_id', $customer->id)->with('project','customer')->get();
         return response()->json([
             // 'conversationLogs' => $conversationLogs,
             'customer' => $customer,
             'projects' => $projects,
+            'conversationLogs' => $conversationLogs
         ]);
     }
 
@@ -366,7 +372,12 @@ class CustomerController extends Controller
     public function getClient($id)
     {
         // Find the client by ID
-        $client = Customer::where('status',$id)->get();
+        if($id == 'all'){
+            $client=Customer::all();
+        }else{
+            $client = Customer::where('status',$id)->get();
+        }
+        
 
         // Return the email if the client exists, otherwise return null
         if ($client) {

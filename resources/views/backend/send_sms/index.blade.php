@@ -15,7 +15,7 @@
     @endif
 
 @section('title')
-    Send-Mail
+    Send-Sms
 @endsection
 
 <!--begin::Toolbar-->
@@ -25,14 +25,14 @@
         <!--begin::Page title-->
         <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
             <!--begin::Title-->
-            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Send-Mail
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Send-Sms
             </h1>
             <!--end::Title-->
             <!--begin::Breadcrumb-->
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1 p-0">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('send-mail') }}" class="text-muted text-hover-primary">Send-Mail</a>
+                    <a href="{{ route('send.sms') }}" class="text-muted text-hover-primary">Send-Sms</a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
@@ -41,7 +41,7 @@
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
-                <li class="breadcrumb-item text-muted">Send-Mail</li>
+                <li class="breadcrumb-item text-muted">Send-Sms</li>
                 <!--end::Item-->
             </ul>
             <!--end::Breadcrumb-->
@@ -58,11 +58,11 @@
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-fluid">
         <div style="background-color: #f0f0f0; padding: 20px;">
-            <h2 style="text-align: center;">Send Mail</h2>
+            <h2 style="text-align: center;">Send Sms</h2>
         </div>
 
         <div style="background-color: #fff; padding: 20px; border: 1px solid #ccc;">
-            <form method="POST" action="{{ route('send.multipleMail') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('send.multipleSms') }}" enctype="multipart/form-data">
                 @csrf
 
                 {{-- client_status field  --}}
@@ -90,12 +90,6 @@
                     @error('client_name')
                         <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label for="subject" class="fw-bold">Mail Subject :</label>
-                    <input type="text" class="form-control" id="subject" name="subject" required
-                        placeholder="Mail subject">
                 </div>
                
                 <div class="mb-3">
