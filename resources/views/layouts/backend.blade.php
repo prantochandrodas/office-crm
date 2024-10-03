@@ -100,6 +100,16 @@ License: For each use you must have a valid license purchased only from above li
     data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true"
     data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true"
     data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
+
+     <!-- Loading Spinner and Backdrop -->
+     <div id="loading" style="display: none;">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <div id="backdrop" style="display: none;"></div>
+
+
     <!--begin::Theme mode setup on page load-->
     <script>
         var defaultThemeMode = "light";

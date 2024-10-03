@@ -9,4 +9,9 @@ class Division extends Model
 {
     use HasFactory;
     protected $fillable=['name','description'];
+
+    public function locations()
+    {
+        return $this->hasMany(Location::class, 'division_id');
+    }
 }

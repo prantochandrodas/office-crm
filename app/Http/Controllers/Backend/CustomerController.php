@@ -25,9 +25,9 @@ class CustomerController extends Controller
         if (auth()->check()) {
             if (auth()->user()->can('primary-client')) {
                 $customers = Customer::all();
-                $divisions=Division::all();
-                $serviceCategories=ServiceCategory::all();
-                return view('backend.customer.index', compact('customers','divisions','serviceCategories'));
+                $divisions = Division::all();
+                $serviceCategories = ServiceCategory::all();
+                return view('backend.customer.index', compact('customers', 'divisions', 'serviceCategories'));
             } else {
                 auth()->logout(); // Log out the user
                 return redirect()->route('login')->with('error', 'You do not have permission to view and have been logged out.');
@@ -40,14 +40,72 @@ class CustomerController extends Controller
 
     public function getdata(Request $request)
     {
+        if($request->status==null){
+            $status=0; 
+        }else{
+
+            $status = $request->input('status'); // Default to 0 if not provided
+        }
+        $division_id = $request->input('division_id');
+        $district_id = $request->input('district_id');
+        $location_id = $request->input('location_id');
+        $service_category_id = $request->input('service_category');
+        $project_id = $request->input('project_id');
+
+        $model = Customer::query();
+        if ($status) {
+            $model->when($status, function ($query) use ($status) {
+                $query->where('status', $status);
+            });
+        }
+        if ($location_id) {
+            $model->when($location_id, function ($query) use ($location_id) {
+                $query->where('location_id', $location_id);
+            });
+        }
+        if ($division_id) {
+            $model->when($division_id, function ($query) use ($division_id) {
+                $query->whereHas('location', function ($query) use ($division_id) {
+                    $query->where('division_id', $division_id);
+                });
+            });
+        }
+        // dd($district_id);
+        if ($district_id) {
+        
+            $model->when($district_id, function ($query) use ($district_id) {
+                $query->whereHas('location', function ($query) use ($district_id) {
+                    $query->where('district_id', $district_id);
+                });
+            });
+        }
+        if ($service_category_id) {
+            $model->when($service_category_id, function ($query) use ($service_category_id) {
+                $query->whereHas('customerProjects.project.serviceCategory', function ($query) use ($service_category_id) {
+                    $query->where('id', $service_category_id);
+                });
+            });
+        }
+        if ($project_id) {
+            $model->when($project_id, function ($query) use ($project_id) {
+                $query->whereHas('projects', function ($query) use ($project_id) {
+                    $query->where('project_id', $project_id);
+                });
+            });
+        }
+       
+        $customers = $model;
+        // $customers = $model->toSql();
+
+        // dd($customers);
         if ($request->ajax()) {
-            $data = Customer::where('status', 0)->orderBy('created_at', 'desc')->get();
-            return DataTables::of($data)
+            // $data = Customer::where('status', 0)->orderBy('created_at', 'desc')->get();
+            return DataTables::of($customers)
                 ->addColumn('action', function ($row) {
                     $editBtn = '';
                     $deleteBtn = '';
-                    $addContactClient='';
-                    $addNonProspective='';
+                    $addContactClient = '';
+                    $addNonProspective = '';
 
                     $editUrl = route('primary-clients.edit', $row->id);
                     $deleteUrl = route('primary-clients.distroy', $row->id);
@@ -57,11 +115,11 @@ class CustomerController extends Controller
                     if (auth()->user()->can('add-to-contact-client')) {
                         $addContactClient = '<span data-id="' . $row->id . '" style="cursor:pointer; padding:10px; font-size:13px" class="add-contact-client badge rounded-pill text-bg-primary text-light ms-2">Add To Contact Client</span>';
                     }
-                    
+
                     if (auth()->user()->can('add-to-non-prospective-client')) {
                         $addNonProspective = '<span data-id="' . $row->id . '" style="cursor:pointer;padding:10px; font-size:13px" class="add-nonprospective badge rounded-pill text-bg-danger text-light ms-2">Add To Non Prospective</span>';
                     }
-                    
+
 
                     if (auth()->user()->can('conversation-create')) {
                         $addConversation = '<button class="btn btn-sm btn-primary ms-2 add-conversation" style="padding: 8px;" data-customer-id="' . $row->id . '"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -87,7 +145,7 @@ class CustomerController extends Controller
                     <span>
                     <i class="fa fa-eye text-light"></i>
                     </span></button>';
-                    
+
 
 
                     if (auth()->user()->can('primary-client-edit')) {
@@ -122,6 +180,9 @@ class CustomerController extends Controller
                 ->make(true);
         }
     }
+
+
+
 
 
     public function getProjects($serviceCategoryId)
@@ -296,7 +357,6 @@ class CustomerController extends Controller
                     'note' => $notes[$index] ?? null,
                 ];
 
-
                 // If a project_id exists in the form, update the existing project
                 if (isset($projectIds[$index]) && $projectIds[$index]) {
                     CustomerProject::where('id', $projectIds[$index])->update($customerProjectData);
@@ -347,7 +407,7 @@ class CustomerController extends Controller
     {
         $customer = Customer::find($id);
         $projects = $customer->demo; // Fetch all projects, or filter as needed
-        $conversationLogs = ConversationLog::where('customer_id', $customer->id)->with('project','customer')->get();
+        $conversationLogs = ConversationLog::where('customer_id', $customer->id)->with('project', 'customer')->get();
         return response()->json([
             // 'conversationLogs' => $conversationLogs,
             'customer' => $customer,
@@ -372,12 +432,12 @@ class CustomerController extends Controller
     public function getClient($id)
     {
         // Find the client by ID
-        if($id == 'all'){
-            $client=Customer::all();
-        }else{
-            $client = Customer::where('status',$id)->get();
+        if ($id == 'all') {
+            $client = Customer::all();
+        } else {
+            $client = Customer::where('status', $id)->get();
         }
-        
+
 
         // Return the email if the client exists, otherwise return null
         if ($client) {
@@ -386,6 +446,4 @@ class CustomerController extends Controller
             return response()->json(['client' => null]);
         }
     }
-
-
 }

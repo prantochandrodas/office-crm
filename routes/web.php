@@ -96,6 +96,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-projects/{serviceCategoryId}', [CustomerController::class, 'getProjects']);
     Route::get('/get-client-email/{id}', [CustomerController::class, 'getClientEmail'])->name('get.client.email');
     Route::get('/get-client/{id}', [CustomerController::class, 'getClient'])->name('get.client');
+    Route::get('/customers/filter', [CustomerController::class, 'filterCustomers'])->name('customers.filter');
 
 
 

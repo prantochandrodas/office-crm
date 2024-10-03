@@ -141,7 +141,7 @@
             <div class="form-group row my-4">
                 <div class="col-md-4">
                     <label for="division_id" class="mb-2 fw-bold">Divisions</label>
-                    <select name="division_id" id="division_id" class="form-control">
+                    <select name="division_id" id="division_id" class="form-select">
                         <option>Select Divisions</option>
                         @foreach ($divisions as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -153,7 +153,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="district_id" class="mb-2 fw-bold">District</label>
-                    <select name="district_id" id="district_id" class="form-control">
+                    <select name="district_id" id="district_id" class="form-select">
                         <option>Select District</option>
                     </select>
                     @error('district_id')
@@ -162,7 +162,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="location_id" class="mb-2 fw-bold">Area</label>
-                    <select name="location_id" id="location_id" class="form-control">
+                    <select name="location_id" id="location_id" class="form-select">
                         <option>Select Area</option>
                     </select>
                     @error('location_id')

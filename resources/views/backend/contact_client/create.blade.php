@@ -133,7 +133,7 @@
             {{-- location_id field  --}}
             <div class="form-group">
                 <label for="location_id" class="mb-2 fw-bold">Area</label>
-                <select name="location_id" id="location_id" class="form-control">
+                <select name="location_id" id="location_id" class="form-select">
                     <option>Select Area</option>
                     @foreach ($locations as $item)
                         <option value="{{$item->id}}">{{$item->name}}</option>    

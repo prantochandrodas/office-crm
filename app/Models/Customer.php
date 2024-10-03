@@ -19,10 +19,14 @@ class Customer extends Model
     {
         return $this->belongsToMany(Project::class, 'customer_projects', 'customer_id', 'project_id');
     }
-
     
 
     public function location(){
         return $this->belongsTo(Location::class,'location_id');
+    }
+    
+    public function customerProjects()
+    {
+        return $this->hasMany(CustomerProject::class);
     }
 }

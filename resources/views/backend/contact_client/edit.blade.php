@@ -66,7 +66,7 @@
 
             <!-- Name field -->
             <div class="form-group">
-                <label for="name" class="mb-2 fw-bold">Contact Name:</label>
+                <label for="name" class="mb-2 fw-bold">Contact Person:</label>
                 <input type="text" class="form-control mb-2" id="name" name="name"
                     value="{{ old('name', $customer->name) }}">
                 @error('name')
@@ -150,7 +150,7 @@
             <div class="form-group row my-4">
                 <div class="col-md-4">
                     <label for="division_id" class="mb-2 fw-bold">Divisions</label>
-                    <select name="division_id" id="division_id" class="form-control">
+                    <select name="division_id" id="division_id" class="form-select">
                         <option>Select Divisions</option>
                         @foreach ($divisions as $item)
                             <option value="{{ $item->id }}"
@@ -165,7 +165,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="district_id" class="mb-2 fw-bold">District</label>
-                    <select name="district_id" id="district_id" class="form-control">
+                    <select name="district_id" id="district_id" class="form-select">
                         <option>Select District</option>
                         @if (isset($districts))
                             @foreach ($districts as $item)
@@ -182,7 +182,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="location_id" class="mb-2 fw-bold">Area</label>
-                    <select name="location_id" id="location_id" class="form-control">
+                    <select name="location_id" id="location_id" class="form-select">
                         <option>Select Area</option>
                         @if (isset($locations))
                             @foreach ($locations as $item)
@@ -317,7 +317,7 @@
                             </select>
                         
                             <!-- Project Selection -->
-                            <select name="projects[]" class="form-control mb-2 project-select">
+                            <select name="projects[]" class="form-select mb-2 project-select">
                                 <option value="">Select Project</option>
                                 @php
                                     // Get the selected service category ID
@@ -376,7 +376,7 @@
                          <option value="{{ $category->id }}">{{ $category->name }}</option>
                      @endforeach
                  </select>
-                 <select name="projects[]" class="form-control mb-2 project-select">
+                 <select name="projects[]" class="form-select mb-2 project-select">
                      <option value="">Select Project</option>
                      @foreach ($projects as $project)
                          <option value="{{ $project->id }}">{{ $project->name }}</option>

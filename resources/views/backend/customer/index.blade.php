@@ -58,21 +58,17 @@
 <div id="kt_app_content" class="app-content flex-column-fluid">
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-fluid">
-
-
-
         <div class="card" style="margin-bottom: 50px">
             <div class="row input-daterange" style="margin-top: 40px">
-
                 <div id="" class="col-md-4">
                     <div class="form-group">
-                        <label for="category_id"><b>Client Status</b></label>
-                        <select id="category_id" class="form-control chosen-select" style="width: 100%">
-                            <option value="">--Select Status--</option>
-                            <option value="">Contact-client</option>
-                            <option value="">Wanted-client</option>
-                            <option value="">Our-client</option>
-                            <option value="">Non-prospective-client</option>
+                        <label for="status"><b>Client Status</b></label>
+                        <select id="status" class="form-select chosen-select" style="width: 100%">
+                            <option value="">Select Status</option>
+                            <option value="1">Contact-client</option>
+                            <option value="2">Wanted-client</option>
+                            <option value="3">Our-client</option>
+                            <option value="5">Non-prospective-client</option>
                         </select>
                     </div>
                 </div>
@@ -80,8 +76,8 @@
                 <div id="" class="col-md-4">
                     <div class="form-group">
                         <label for="division_id"><b>Divisions</b></label>
-                        <select id="division_id" class="form-control" name="division_id" required>
-                            <option value="">--Select Divisions--</option>
+                        <select id="division_id" class="form-select" name="division_id" required>
+                            <option value="">All Divisions</option>
                             @foreach ($divisions as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
@@ -92,16 +88,16 @@
                 <div id="" class="col-md-4">
                     <div class="form-group">
                         <label for="district_id"><b>District</b></label>
-                        <select id="district_id" class="form-control" name="district_id" required>
-                            <option value="">--Select District--</option>
+                        <select id="district_id" class="form-select" name="district_id" required>
+                            <option value="">All District</option>
                         </select>
                     </div>
                 </div>
                 <div id="" class="col-md-4">
                     <div class="form-group">
                         <label for="location_id"><b>Area</b></label>
-                        <select id="location_id" class="form-control" name="location_id" required>
-                            <option value="">--Select Area--</option>
+                        <select id="location_id" class="form-select" name="location_id" required>
+                            <option value="">All Area</option>
                         </select>
                     </div>
                 </div>
@@ -109,8 +105,8 @@
                 <div id="" class="col-md-4">
                     <div class="form-group">
                         <label for="service_category"><b>Service Category</b></label>
-                        <select id="service_category" class="form-control" name="service_category" required>
-                            <option value="">--Select Service Catebgory--</option>
+                        <select id="service_category" class="form-select" name="service_category" required>
+                            <option value="">All Service Catebgory</option>
                             @foreach ($serviceCategories as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>
                             @endforeach
@@ -121,22 +117,17 @@
                 <div id="" class="col-md-4">
                     <div class="form-group">
                         <label for="project_id"><b>Project</b></label>
-                        <select id="project_id" class="form-control" name="project_id" required>
-                            <option value="">--Select Area--</option>
+                        <select id="project_id" class="form-select" name="project_id" required>
+                            <option value="">All Project</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="col-md-2" style="margin-top: 20px">
-                    <button type="button" name="filter" id="filter" class="btn btn-success" style="padding: 6px;">
-                        <img src="{{ asset('assets/backend/assets/icon/search.svg') }}" alt="Search"
-                            style="height: 20px; width: 20px;">
+                <div class="col-md-4" style="margin-top: 20px">
+                    <button type="button" name="filter" id="filter" class="btn btn-success btn-sm d-flex align-items-center">
+                        <i class="fas fa-search"></i> Search
                     </button>
-                    <button type="button" name="print" id="printBtn" onclick="printPage()" class="btn btn-primary"
-                        style="padding: 6px;">
-                        <img src="{{ asset('assets/backend/assets/icon/printer.svg') }}" alt="Printer"
-                            style="height: 20px; width: 20px;">
-                    </button>
+                   
                 </div>
             </div>
         </div>
@@ -223,13 +214,7 @@
 
     @include('backend.customer.view_conversation_modal')
 
-    <!-- Loading Spinner and Backdrop -->
-    <div id="loading" style="display: none;">
-        <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
-    <div id="backdrop" style="display: none;"></div>
+   
 
 
     <!-- Custom CSS for Table Borders -->
@@ -274,7 +259,7 @@
                         type: 'GET',
                         success: function(data) {
                             $('#district_id').empty();
-                            $('#district_id').append('<option>--Select District--</option>');
+                            $('#district_id').append('<option value="">All District</option>');
                             $.each(data, function(key, value) {
                                 if (data.length > 0) {
                                     $('#district_id').append('<option value="' + value
@@ -290,7 +275,7 @@
                     })
                 } else {
                     $('#district_id').empty();
-                    $('#district_id').append('<option>Select District</option>');
+                    $('#district_id').append('<option value="">All District</option>');
                 }
             });
 
@@ -303,7 +288,7 @@
                         type: 'GET',
                         success: function(data) {
                             $('#project_id').empty();
-                            $('#project_id').append('<option>--Select Project--</option>');
+                            $('#project_id').append('<option value="">Select Project</option>');
                             $.each(data, function(key, value) {
                                 if (data.length > 0) {
                                     $('#project_id').append('<option value="' + value
@@ -319,7 +304,7 @@
                     })
                 } else {
                     $('#project_id').empty();
-                    $('#project_id').append('<option>Select District</option>');
+                    $('#project_id').append('<option>Select Project</option>');
                 }
             });
             // When District changes, load Locations
@@ -333,7 +318,7 @@
                         success: function(data) {
                             $('#location_id').empty();
                             $('#location_id').append(
-                                '<option value="">--Select Area--</option>');
+                                '<option value="">All Area</option>');
                             $.each(data, function(key, value) {
                                 $('#location_id').append('<option value="' + value.id +
                                     '">' + value.name + '</option>');
@@ -360,53 +345,94 @@
                 $('#smsForm')[0].reset(); // Reset the form fields
             });
 
-            $('#featuredProjectTitleHeading').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('primary-clients.getdata') }}',
-                columns: [{
-                        data: null, // Use null to signify that this column does not map directly to any data source
-                        name: 'serial_number',
-                        render: function(data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart +
-                                1; // Calculate the serial number
-                        },
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'company_name',
-                        name: 'company_name'
-                    },
-                    {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'phone',
-                        name: 'phone'
-                    },
-                    {
-                        data: 'email',
-                        name: 'email'
-                    },
-                    {
-                        data: 'address',
-                        name: 'address'
-                    },
-                    {
-                        data: 'note',
-                        name: 'note',
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
 
-                ]
-            });
+            // data table code 
+            window.onload = function() {
+                load_data();
+
+                function load_data(status = "", division_id = "", project_id = "", service_category = "", location_id = "", district_id =
+                    "") {
+                    var table = $('#featuredProjectTitleHeading').DataTable({
+                        language: {
+                            processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
+                        },
+                        searching: false,
+                        ordering: false,
+                        serverSide: true,
+                        ajax: {
+                            url: '{!! route('primary-clients.getdata') !!}',
+                            data: {
+                                status: status,
+                                division_id: division_id,
+                                project_id: project_id,
+                                service_category: service_category,
+                                location_id: location_id,
+                                district_id: district_id
+                            }
+                        },
+                        columns: [{
+                                data: null, // Use null to signify that this column does not map directly to any data source
+                                name: 'serial_number',
+                                render: function(data, type, row, meta) {
+                                    return meta.row + meta.settings._iDisplayStart +
+                                        1; // Calculate the serial number
+                                },
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'company_name',
+                                name: 'company_name',
+                                class: "text-center"
+                            },
+                            {
+                                data: 'name',
+                                name: 'name',
+                                class: "text-center"
+                            },
+                            {
+                                data: 'phone',
+                                name: 'phone',
+                                class: "text-center"
+                            },
+                            {
+                                data: 'email',
+                                name: 'email',
+                                class: "text-center"
+                            },
+                            {
+                                data: 'address',
+                                name: 'address',
+                                class: "text-center"
+                            },
+                            {
+                                data: 'note',
+                                name: 'note',
+                                class: "text-center"
+                            },
+                            {
+                                data: 'action',
+                                name: 'action',
+                                class: "text-center action-field"
+                            },
+                        ]
+                    });
+                }
+
+                $('#filter').click(function() {
+                    var status = $('#status').val();
+                    var division_id = $('#division_id').val();
+                    var project_id = $('#project_id').val();
+                    var service_category = $('#service_category').val();
+                    var location_id = $('#location_id').val();
+                    var district_id = $('#district_id').val();
+
+                    $('#featuredProjectTitleHeading').DataTable().destroy();
+                    load_data(status, division_id, project_id, service_category, location_id, district_id);
+                });
+
+
+            }
 
 
             // Handle client selection change
@@ -484,9 +510,6 @@
                 url: '/get-customer-data/' + customerId,
                 type: 'GET',
                 success: function(response) {
-                    console.log(response); // Check the response structure
-
-                    // Assuming response contains an array of conversationLogs
                     var conversationLogs = response.conversationLogs;
 
                     // Clear existing rows in the table body
@@ -520,7 +543,7 @@
 
         $(document).on('click', '.add-contact-client', function() {
             var customerId = $(this).data('id');
-
+           
             $.ajax({
                 url: '/client/' + customerId + '/update-status',
                 type: 'POST',
@@ -529,6 +552,7 @@
                     status: 1 // Set the status you want here
                 },
                 success: function(response) {
+                    
                     toastr.success(response.message);
                     $('#featuredProjectTitleHeading').DataTable().ajax.reload(null, false);
                     // Optionally, reload the DataTable or update the row dynamically
@@ -551,7 +575,9 @@
                 },
                 success: function(response) {
                     toastr.success(response.message);
-                    $('#featuredProjectTitleHeading').DataTable().ajax.reload(null, false);
+
+            // Reload the DataTable
+            $('#featuredProjectTitleHeading').DataTable().ajax.reload(null, false); // Keep current page
                     // Optionally, reload the DataTable or update the row dynamically
                 },
                 error: function(xhr) {

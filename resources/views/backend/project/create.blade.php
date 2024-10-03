@@ -64,7 +64,7 @@
             {{-- service_category_id field  --}}
             <div class="form-group mb-2">
                 <label for="service_category_id" class="mb-2 fw-bold">Service Category:</label>
-                <select name="service_category_id" id="service_category_id" class="form-control">
+                <select name="service_category_id" id="service_category_id" class="form-select">
                     <option>Select Project Service</option>
                     @foreach ($services as $item)
                         <option value="{{ $item->id }}">{{ $item->name }}</option>

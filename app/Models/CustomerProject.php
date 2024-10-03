@@ -19,4 +19,14 @@ class CustomerProject extends Model
     // {
     //     return $this->belongsTo(Project::class, 'project_id');
     // }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
 }

@@ -20,4 +20,15 @@ class Project extends Model
     public function service(){
         return $this->belongsTo(ServiceCategory::class,'service_category_id');
     }
+
+    public function serviceCategory()
+    {
+        return $this->belongsTo(ServiceCategory::class, 'service_category_id');
+    }
+
+    public function customerProjects()
+    {
+        return $this->hasMany(CustomerProject::class);
+    }
+
 }

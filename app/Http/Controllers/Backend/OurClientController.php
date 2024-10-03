@@ -19,7 +19,9 @@ class OurClientController extends Controller
     {
         if (auth()->check()) {
             if (auth()->user()->can('our-client')) {
-                return view('backend.our_client.index');
+                $divisions = Division::all();
+                $serviceCategories = ServiceCategory::all();
+                return view('backend.our_client.index',compact('divisions','serviceCategories'));
             } else {
                 auth()->logout(); // Log out the user
                 return redirect()->route('login')->with('error', 'You do not have permission to view and have been logged out.');
@@ -32,9 +34,52 @@ class OurClientController extends Controller
 
     public function getdata(Request $request)
     {
+        $division_id = $request->input('division_id');
+        $district_id = $request->input('district_id');
+        $location_id = $request->input('location_id');
+        $service_category_id = $request->input('service_category');
+        $project_id = $request->input('project_id');
+        $model = Customer::where('status', 3);
+        
+        if ($location_id) {
+            $model->when($location_id, function ($query) use ($location_id) {
+                $query->where('location_id', $location_id);
+            });
+        }
+        if ($division_id) {
+            $model->when($division_id, function ($query) use ($division_id) {
+                $query->whereHas('location', function ($query) use ($division_id) {
+                    $query->where('division_id', $division_id);
+                });
+            });
+        }
+        // dd($district_id);
+        if ($district_id) {
+        
+            $model->when($district_id, function ($query) use ($district_id) {
+                $query->whereHas('location', function ($query) use ($district_id) {
+                    $query->where('district_id', $district_id);
+                });
+            });
+        }
+        if ($service_category_id) {
+            $model->when($service_category_id, function ($query) use ($service_category_id) {
+                $query->whereHas('customerProjects.project.serviceCategory', function ($query) use ($service_category_id) {
+                    $query->where('id', $service_category_id);
+                });
+            });
+        }
+        if ($project_id) {
+            $model->when($project_id, function ($query) use ($project_id) {
+                $query->whereHas('projects', function ($query) use ($project_id) {
+                    $query->where('project_id', $project_id);
+                });
+            });
+        }
+       
+        $customers = $model;
         if ($request->ajax()) {
-            $data = Customer::where('status', 3)->orderBy('created_at', 'desc')->get();
-            return DataTables::of($data)
+            return DataTables::of($customers)
                 ->addColumn('action', function ($row) {
 
                     $deleteBtn = '';
@@ -45,6 +90,13 @@ class OurClientController extends Controller
                     $deleteUrl = route('our-clients.distroy', $row->id);
                     $csrfToken = csrf_field();
                     $method = method_field('DELETE');
+
+                    $viewConversation = '<button class="btn btn-sm ms-2 view-conversation" style="padding: 8px; background-color:#6c757d" data-customer-id="' . $row->id . '"  data-bs-toggle="modal" data-bs-target="#viewConversationdrop">
+                    <span>
+                    <i class="fa fa-eye text-light"></i>
+                    </span></button>';
+
+
                     if (auth()->user()->can('conversation-create')) {
                         $addConversation = '<button class="btn btn-sm btn-primary ms-2 add-conversation" style="padding: 8px;" data-customer-id="' . $row->id . '"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     <span>
@@ -83,7 +135,7 @@ class OurClientController extends Controller
                 </form>';
                     }
                     return '<div class="d-flex align-items-center justify-content-center mb-2">'
-                        . $editBtn . $deleteBtn . $addConversation;
+                        . $editBtn . $deleteBtn . $addConversation.$viewConversation;
                 })
                 ->rawColumns(['action'])
                 ->make(true);

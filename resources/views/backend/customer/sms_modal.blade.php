@@ -13,7 +13,7 @@
                     <div class="mb-3">
                         <label for="name" class="form-label">Client name</label>
                         <select name="client_name_sms" id="client_name_sms"
-                            class="form-control smsExample select2">
+                            class="form-select smsExample select2">
                             <option>Select Client</option>
                             @foreach ($customers as $item)
                                 <option value="{{ $item->id }}">{{ $item->name }}</option>

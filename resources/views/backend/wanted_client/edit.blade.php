@@ -65,7 +65,7 @@
 
              <!-- Name field -->
              <div class="form-group">
-                <label for="name" class="mb-2 fw-bold">Contact Name:</label>
+                <label for="name" class="mb-2 fw-bold">Contact Person:</label>
                 <input type="text" class="form-control mb-2" id="name" name="name"
                     value="{{ old('name', $customer->name) }}">
                 @error('name')
@@ -149,7 +149,7 @@
             <div class="form-group row my-4">
                 <div class="col-md-4">
                     <label for="division_id" class="mb-2 fw-bold">Divisions</label>
-                    <select name="division_id" id="division_id" class="form-control">
+                    <select name="division_id" id="division_id" class="form-select">
                         <option>Select Divisions</option>
                         @foreach ($divisions as $item)
                             <option value="{{ $item->id }}"
@@ -164,7 +164,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="district_id" class="mb-2 fw-bold">District</label>
-                    <select name="district_id" id="district_id" class="form-control">
+                    <select name="district_id" id="district_id" class="form-select">
                         <option>Select District</option>
                         @if (isset($districts))
                             @foreach ($districts as $item)
@@ -181,7 +181,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="location_id" class="mb-2 fw-bold">Area</label>
-                    <select name="location_id" id="location_id" class="form-control">
+                    <select name="location_id" id="location_id" class="form-select">
                         <option>Select Area</option>
                         @if (isset($locations))
                             @foreach ($locations as $item)
@@ -197,72 +197,6 @@
                     @enderror
                 </div>
             </div>
-
-
-            <!-- Projects and statuses -->
-            {{-- <div id="projects-container">
-                <!-- Show label only once -->
-                <div class="d-flex align-items-center justify-content-between my-2">
-                    <label for="projects" class="mb-2 fw-bold">Assign Project:</label>
-                    <!-- Button to add more project fields, if needed -->
-                    <button type="button" class="btn btn-success btn-sm" id="add-more"><svg
-                            style="width: 20px; height:20px" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <g id="Edit / Add_Plus">
-                                    <path id="Vector" d="M6 12H12M12 12H18M12 12V18M12 12V6" stroke="#ffffff"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </g>
-                            </g>
-                        </svg> Add More Projects</button>
-                </div>
-
-                @foreach ($customer->projects as $index => $customerProject)
-                    <div class="form-group project-group">
-                        <div class="d-flex align-items-center justify-content-end my-2">
-                            @if ($index >= 0)
-                                <!-- Only show remove button for subsequent fields -->
-                                <button type="button" class="btn btn-danger btn-sm remove-group">
-                                    <svg style="width:20px; height:20px" viewBox="0 0 24 24" fill="none"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
-                                        </g>
-                                        <g id="SVGRepo_iconCarrier">
-                                            <g id="Edit / Remove_Minus">
-                                                <path id="Vector" d="M6 12H18" stroke="#ffffff" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </g>
-                                        </g>
-                                    </svg> Remove
-                                </button>
-                            @endif
-                        </div>
-                        <div class="d-flex">
-                            <!-- Hidden ID field for updating existing records -->
-                            <input type="hidden" name="project_ids[]" value="{{ $customerProject->id }}">
-
-                           
-
-                            <!-- Project Selection -->
-                            <select name="projects[]" class="form-control mb-2">
-                                <option value="">Select Project</option>
-                                @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}"
-                                        {{ $project->id == $customerProject->project_id ? 'selected' : '' }}>
-                                        {{ $project->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-
-                            <!-- Notes Input -->
-                            <textarea name="notes[]" class="form-control mb-2 ms-2" placeholder="Notes">{{ $customerProject->note }}</textarea>
-                        </div>
-                    </div>
-                @endforeach
-            </div> --}}
 
             <div id="projects-container">
                 <!-- Show label only once -->
@@ -316,7 +250,7 @@
                             </select>
                         
                             <!-- Project Selection -->
-                            <select name="projects[]" class="form-control mb-2 project-select">
+                            <select name="projects[]" class="form-select mb-2 project-select">
                                 <option value="">Select Project</option>
                                 @php
                                     // Get the selected service category ID
@@ -375,7 +309,7 @@
                          <option value="{{ $category->id }}">{{ $category->name }}</option>
                      @endforeach
                  </select>
-                 <select name="projects[]" class="form-control mb-2 project-select">
+                 <select name="projects[]" class="form-select mb-2 project-select">
                      <option value="">Select Project</option>
                      @foreach ($projects as $project)
                          <option value="{{ $project->id }}">{{ $project->name }}</option>
