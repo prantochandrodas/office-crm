@@ -17,18 +17,20 @@ class ClientMail extends Mailable
     public $clientEmail;
     public $clientName;
     public $subject;
+    public $attachment; 
     /**
      * Create a new message instance.
      *
      * @param string $messageContent
      * @param string $clientEmail
      */
-    public function __construct($messageContent, $clientEmail,$clientName,$subject)
+    public function __construct($messageContent, $clientEmail, $clientName, $subject,  $attachment = null)
     {
         $this->messageContent = $messageContent; // Assigning the message content
         $this->clientEmail = $clientEmail;       // Assigning the client email
         $this->clientName = $clientName;       // Assigning the client email
-        $this->subject = $subject;   
+        $this->subject = $subject;
+        $this->attachment = $attachment; 
     }
 
     /**
@@ -62,6 +64,15 @@ class ClientMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+    
+        if ($this->attachment) {
+            // Attach the file directly with the correct filename
+            $attachments[] = \Illuminate\Mail\Mailables\Attachment::fromPath($this->attachment->getRealPath())
+                ->as($this->attachment->getClientOriginalName()) // This sets the file name
+                ->withMime($this->attachment->getMimeType());   // This sets the MIME type
+        }
+        
+        return $attachments;
     }
 }

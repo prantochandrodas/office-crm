@@ -76,23 +76,26 @@
             @method('PUT')
             <div class="form-group">
                 <label for="customer_id">Customer</label>
-                <select id="customer_id" name="customer_id" class="form-control example select2" disabled>
-                    @foreach ($customers as $customer)
-                        <option value="{{ $customer->id }}"
-                            {{ $customerLog->customer_id == $customer->id ? 'selected' : '' }}>{{ $customer->name }} ({{$customer->phone}})
-                        </option>
-                    @endforeach
-                </select>
+                <!-- Display the customer name in the input field -->
+                <input type="text" class="form-control" value="{{ $customerLog->customer->name }}" readonly>
+
+                <!-- Hidden input to store and send the customer_id -->
+                <input type="hidden" name="customer_id" value="{{ $customerLog->customer->id }}">
             </div>
             <div class="form-group">
                 <label for="project_id">Project</label>
-                <select id="project_id" name="project_id" class="form-control" disabled>
-                    <option value="{{ $customerLog->project->id }}">{{ $customerLog->project->name }}</option>
-                </select>
+                <input type="text" class="form-control" value="{{ $customerLog->project->name }}" readonly>
+
+                <!-- Hidden input to store and send the customer_id -->
+                <input type="hidden" name="project_id" value="{{ $customerLog->project->id }}">
             </div>
             <div class="form-group">
                 <label for="note">Note</label>
                 <textarea id="summernote" name="note" class="form-control">{{ $customerLog->note }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" name="date" class="form-control" id="date" value="{{$customerLog->date}}">
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
         </form>

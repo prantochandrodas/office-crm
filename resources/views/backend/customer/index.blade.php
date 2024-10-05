@@ -64,11 +64,11 @@
                     <div class="form-group">
                         <label for="status"><b>Client Status</b></label>
                         <select id="status" class="form-select chosen-select" style="width: 100%">
-                            <option value="">Select Status</option>
-                            <option value="1">Contact-client</option>
-                            <option value="2">Wanted-client</option>
-                            <option value="3">Our-client</option>
-                            <option value="5">Non-prospective-client</option>
+                            <option value="">All Primary-Client</option>
+                            <option value="1">All Contact-client</option>
+                            <option value="2">All Wanted-client</option>
+                            <option value="3">All Our-client</option>
+                            <option value="5">All Non-prospective-client</option>
                         </select>
                     </div>
                 </div>
@@ -124,10 +124,11 @@
                 </div>
 
                 <div class="col-md-4" style="margin-top: 20px">
-                    <button type="button" name="filter" id="filter" class="btn btn-success btn-sm d-flex align-items-center">
+                    <button type="button" name="filter" id="filter"
+                        class="btn btn-success btn-sm d-flex align-items-center">
                         <i class="fas fa-search"></i> Search
                     </button>
-                   
+
                 </div>
             </div>
         </div>
@@ -214,7 +215,7 @@
 
     @include('backend.customer.view_conversation_modal')
 
-   
+
 
 
     <!-- Custom CSS for Table Borders -->
@@ -249,7 +250,11 @@
 
     <script>
         $(document).ready(function() {
-
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    toastr.error('{{ $error }}');
+                @endforeach
+            @endif
             $(document).on('change', '#division_id', function() {
                 let divisionId = $(this).val();
                 let district = $(this).find('#district_id');
@@ -350,7 +355,8 @@
             window.onload = function() {
                 load_data();
 
-                function load_data(status = "", division_id = "", project_id = "", service_category = "", location_id = "", district_id =
+                function load_data(status = "", division_id = "", project_id = "", service_category = "",
+                    location_id = "", district_id =
                     "") {
                     var table = $('#featuredProjectTitleHeading').DataTable({
                         language: {
@@ -428,7 +434,8 @@
                     var district_id = $('#district_id').val();
 
                     $('#featuredProjectTitleHeading').DataTable().destroy();
-                    load_data(status, division_id, project_id, service_category, location_id, district_id);
+                    load_data(status, division_id, project_id, service_category, location_id,
+                        district_id);
                 });
 
 
@@ -543,7 +550,7 @@
 
         $(document).on('click', '.add-contact-client', function() {
             var customerId = $(this).data('id');
-           
+
             $.ajax({
                 url: '/client/' + customerId + '/update-status',
                 type: 'POST',
@@ -552,7 +559,7 @@
                     status: 1 // Set the status you want here
                 },
                 success: function(response) {
-                    
+
                     toastr.success(response.message);
                     $('#featuredProjectTitleHeading').DataTable().ajax.reload(null, false);
                     // Optionally, reload the DataTable or update the row dynamically
@@ -576,8 +583,9 @@
                 success: function(response) {
                     toastr.success(response.message);
 
-            // Reload the DataTable
-            $('#featuredProjectTitleHeading').DataTable().ajax.reload(null, false); // Keep current page
+                    // Reload the DataTable
+                    $('#featuredProjectTitleHeading').DataTable().ajax.reload(null,
+                    false); // Keep current page
                     // Optionally, reload the DataTable or update the row dynamically
                 },
                 error: function(xhr) {

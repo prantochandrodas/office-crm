@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Mail;
 
 class MailController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         if (auth()->check()) {
             if (auth()->user()->can('send-email')) {
                 return view('backend.mail_client.index');
@@ -32,6 +33,7 @@ class MailController extends Controller
                     'email' => 'required|email',
                     'message' => 'required',
                     'subject' => 'required',
+                    'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
                 ]);
 
                 // Get client ID from the request
@@ -49,8 +51,14 @@ class MailController extends Controller
                 $messageContent = $request->message;
                 $clientName = $client->name; // Get the client's name
                 $subject = $request->subject;
+
+                $attachment = null;
+                if ($request->hasFile('attachment')) {
+                    $attachment = $request->file('attachment'); // Get the uploaded file
+                }
+
                 // Send the email
-                Mail::to($clientEmail)->send(new ClientMail($messageContent, $clientEmail, $clientName,$subject));
+                Mail::to($clientEmail)->send(new ClientMail($messageContent, $clientEmail, $clientName, $subject, $attachment));
 
                 // Redirect or return response
                 return back()->with('success', 'Mail sent successfully.');
@@ -63,16 +71,18 @@ class MailController extends Controller
         }
     }
 
-    public function multipleMail(Request $request){
+    public function multipleMail(Request $request)
+    {
         if (auth()->check()) {
             if (auth()->user()->can('send-email')) {
                 $request->validate([
                     'subject' => 'required|string|max:255',
                     'message' => 'required|string',
                     'client_status' => 'required',
-                    'client_name' => 'required'
+                    'client_name' => 'required',
+                    'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
                 ]);
-                
+
                 // dd($request->client_name);
                 // If 'All Clients' is selected, send email to all clients with the selected client_status
                 if ($request->client_name === 'all') {
@@ -82,12 +92,17 @@ class MailController extends Controller
                     // Fetch the specific client
                     $clients = Customer::where('id', $request->client_name)->get();
                 }
-            
+
+                $attachment = null;
+                if ($request->hasFile('attachment')) {
+                    $attachment = $request->file('attachment'); // Get the uploaded file
+                }
+
                 foreach ($clients as $client) {
                     // Logic to send email to each client
-                    Mail::to($client->email)->send(new ClientMail($request->message, $client->email, $client->name,$request->subject));
+                    Mail::to($client->email)->send(new ClientMail($request->message, $client->email, $client->name, $request->subject,$attachment));
                 }
-            
+
                 return redirect()->back()->with('success', 'Mail sent successfully');
             } else {
                 auth()->logout(); // Log out the user

@@ -8,7 +8,7 @@
             </div>
             <div class="modal-body">
                 <!-- Your form or content goes here -->
-                <form id="mailForm" method="POST" action="{{ route('mail.client') }}">
+                <form id="mailForm" method="POST" action="{{ route('mail.client') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label for="name" class="form-label">Client name</label>
@@ -28,6 +28,10 @@
                         <label for="email" class="form-label">Client Email</label>
                         <input type="email" class="form-control" id="email" name="email" required
                             placeholder="Client Email">
+                    </div>
+                    <div class="mb-3">
+                        <label for="attachment" class="fw-bold">Attach File :</label>
+                        <input type="file" class="form-control" id="attachment" name="attachment">
                     </div>
                     <div class="mb-3">
                         <label for="message" class="form-label">Message</label>

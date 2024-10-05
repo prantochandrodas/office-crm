@@ -27,7 +27,7 @@ aria-labelledby="staticBackdropLabel" aria-hidden="true">
                     <label for="modal_date" class="mb-2 fw-bold">Date:</label>
                     <input type="date" class="form-control" name="date">
                 </div>
-                <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal">Create</button>
+                <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal" >Create</button>
             </form>
         </div>
     </div>

@@ -98,7 +98,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/get-client/{id}', [CustomerController::class, 'getClient'])->name('get.client');
     Route::get('/customers/filter', [CustomerController::class, 'filterCustomers'])->name('customers.filter');
 
-
+    Route::get('/get-client-details/{id}', [CustomerController::class, 'getClientDetails']);
 
     Route::get('/contact-client', [ContactClientController::class, 'index'])->name('contact-clients');
     Route::get('/contact-client/getdata', [ContactClientController::class, 'getdata'])->name('contact-clients.getdata');
@@ -145,6 +145,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/conversation-log/edit/{id}', [ConversationLogController::class, 'edit'])->name('conversation-logs.edit');
     Route::put('/conversation-log/update/{id}', [ConversationLogController::class, 'update'])->name('conversation-logs.update');
     Route::delete('/conversation-log/distroy/{id}', [ConversationLogController::class, 'distroy'])->name('conversation-logs.distroy');
+    Route::get('/get-conversationLog/{id}', [ConversationLogController::class, 'getConversationlog'])->name('conversation-logs.getConversationlog');
     Route::get('/assigned/project/{id}', [ConversationLogController::class, 'getAssignedProject'])->name('conversation-logs.getAssignedProject');
     Route::get('/search/customers', [CustomerController::class, 'search'])->name('customers.search');
 

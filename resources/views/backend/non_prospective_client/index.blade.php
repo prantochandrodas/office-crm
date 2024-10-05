@@ -167,6 +167,12 @@
     </style>
     <script>
         $(document).ready(function() {
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    toastr.error('{{ $error }}');
+                @endforeach
+            @endif
+            
             window.onload = function() {
                 load_data();
 

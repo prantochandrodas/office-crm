@@ -168,6 +168,11 @@
     </style>
     <script>
         $(document).ready(function() {
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    toastr.error('{{ $error }}');
+                @endforeach
+            @endif
              // data table code 
              window.onload = function() {
                 load_data();
