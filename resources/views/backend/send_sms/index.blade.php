@@ -69,7 +69,7 @@
                     <label for="client_status" class="mb-2 fw-bold">Client Status:</label>
                     <select name="client_status" id="client_status" class="form-control example select2">
                         <option value="all">All Client</option>
-                        <option value="0">Primary Client</option>
+                        <option value="6">Primary Client</option>
                         <option value="1">Contact Client</option>
                         <option value="2">Wanted Client</option>
                         <option value="3">Our Client</option>
@@ -94,7 +94,7 @@
                 {{-- Message Field --}}
                 <div class="mb-3">
                     <label for="message" class="fw-bold">Message :</label>
-                    <textarea class="form-control" id="summernote" name="message" rows="3" required placeholder="Message"></textarea>
+                    <textarea class="form-control" id="editor" name="message" rows="3" required placeholder="Message"></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-sm mt-4">Send Sms</button>
@@ -147,6 +147,8 @@
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
 <script>
     $(document).ready(function() {
+
+        CKEDITOR.replace('editor');
         var defaultClientStatus = 'all'; // Default value
 
         // Trigger change event on page load to set the default clientStatus
@@ -208,11 +210,7 @@
             }
         });
 
-        // Initialize Summernote
-        $('#summernote').summernote({
-            height: 250
-        });
-
+       
         $('#client_status').val(defaultClientStatus).trigger('change');
 
         // Handle form submission

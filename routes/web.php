@@ -85,18 +85,28 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/sms-client', [SmsController::class, 'sendSms'])->name('sms-clients');
     Route::post('/send-mail/multipleSms', [SmsController::class, 'multipleSms'])->name('send.multipleSms');
 
-    Route::get('/primary-client', [CustomerController::class, 'index'])->name('primary-clients');
-    Route::get('/primary-client/create', [CustomerController::class, 'create'])->name('primary-clients.create');
-    Route::get('/primary-client/getdata', [CustomerController::class, 'getdata'])->name('primary-clients.getdata');
-    Route::post('/primary-client/store', [CustomerController::class, 'store'])->name('primary-clients.store');
-    Route::get('/primary-client/edit/{id}', [CustomerController::class, 'edit'])->name('primary-clients.edit');
-    Route::put('/primary-client/update/{id}', [CustomerController::class, 'update'])->name('primary-clients.update');
-    Route::delete('/primary-client/distroy/{id}', [CustomerController::class, 'distroy'])->name('primary-clients.distroy');
+    Route::get('/primary-client', [PrimaryClientController::class, 'index'])->name('primary-clients');
+    Route::get('/primary-client/getdata', [PrimaryClientController::class, 'getdata'])->name('primary-clients.getdata');
+    Route::get('/primary-client/edit/{id}', [PrimaryClientController::class, 'edit'])->name('primary-clients.edit');
+    Route::put('/primary-client/update/{id}', [PrimaryClientController::class, 'update'])->name('primary-clients.update');
+    Route::delete('/primary-client/distroy/{id}', [PrimaryClientController::class, 'distroy'])->name('primary-clients.distroy');
+
+
+
+    Route::get('/all-client', [CustomerController::class, 'index'])->name('all-clients');
+    Route::get('/all-client/getdata', [CustomerController::class, 'getdata'])->name('all-clients.getdata');
+    Route::get('/all-client/edit/{id}', [CustomerController::class, 'edit'])->name('all-clients.edit');
+    Route::put('/all-client/update/{id}', [CustomerController::class, 'update'])->name('all-clients.update');
+    Route::delete('/all-client/distroy/{id}', [CustomerController::class, 'distroy'])->name('all-clients.distroy');
+    Route::get('/all-client/create', [CustomerController::class, 'create'])->name('all-clients.create');
+    Route::post('/all-client/store', [CustomerController::class, 'store'])->name('all-clients.store');
     Route::get('/get-customer-data/{id}', [CustomerController::class, 'getCustomerData']);
     Route::get('/get-projects/{serviceCategoryId}', [CustomerController::class, 'getProjects']);
     Route::get('/get-client-email/{id}', [CustomerController::class, 'getClientEmail'])->name('get.client.email');
     Route::get('/get-client/{id}', [CustomerController::class, 'getClient'])->name('get.client');
     Route::get('/customers/filter', [CustomerController::class, 'filterCustomers'])->name('customers.filter');
+
+   
 
     Route::get('/get-client-details/{id}', [CustomerController::class, 'getClientDetails']);
 

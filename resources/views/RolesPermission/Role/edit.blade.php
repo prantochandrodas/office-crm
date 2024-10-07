@@ -75,7 +75,12 @@
                             'add-to-wanted-client',
                             'add-to-non-prospective-client',
                         ],
-                        'conversation' => ['conversation-create', 'conversation-edit', 'conversation-delete'],
+                        'conversation' => [
+                            'conversation-create',
+                            'conversation-edit',
+                            'conversation-delete',
+                            'view-conversation',
+                        ],
                         'user' => ['user-create', 'user-edit', 'user-delete'],
                         'role' => ['role-create', 'role-edit', 'role-delete'],
                         'district' => ['district-create', 'district-edit', 'district-delete'],
@@ -90,6 +95,7 @@
                             'service-category-delete',
                         ],
                         'our-client' => ['our-client-create', 'our-client-edit', 'our-client-delete'],
+                        'client' => ['client-create', 'client-edit', 'client-delete'],
                     ];
                 @endphp
 

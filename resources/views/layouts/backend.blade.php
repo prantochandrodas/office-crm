@@ -57,13 +57,14 @@ License: For each use you must have a valid license purchased only from above li
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> --}}
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 
     <style>
         #loading {
@@ -101,8 +102,8 @@ License: For each use you must have a valid license purchased only from above li
     data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true"
     data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
 
-     <!-- Loading Spinner and Backdrop -->
-     <div id="loading" style="display: none;">
+    <!-- Loading Spinner and Backdrop -->
+    <div id="loading" style="display: none;">
         <div class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
         </div>
@@ -166,6 +167,42 @@ License: For each use you must have a valid license purchased only from above li
     <script>
         var hostUrl = "assets/";
     </script>
+
+    <script>
+        // Show the loading spinner when navigating to the page
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // Handle page load from the back-forward cache
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('backdrop').style.display = 'none';
+            }
+        });
+
+        window.addEventListener('load', function() {
+            // Hide the loading and backdrop when the page finishes loading
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('backdrop').style.display = 'none';
+        });
+
+        // Show the loading spinner when a form is submitted or when navigating away
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('backdrop').style.display = 'block';
+        }
+
+        // Event listener for the page navigation (including back button)
+        window.addEventListener('beforeunload', function() {
+            showLoading();
+        });
+
+        // Optional: Attach the loading spinner to form submission
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                showLoading();
+            });
+        }
+    </script>
     <!--begin::Global Javascript Bundle(mandatory for all pages)-->
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
@@ -206,7 +243,7 @@ License: For each use you must have a valid license purchased only from above li
     <script src="{{ asset('assets/js/custom/utilities/modals/users-search.js') }}"></script>
     <!--end::Custom Javascript-->
     <!--end::Javascript-->
-
+    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </body>

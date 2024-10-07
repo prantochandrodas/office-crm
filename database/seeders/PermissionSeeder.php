@@ -28,13 +28,14 @@ class PermissionSeeder extends Seeder
             'wanted-client' => ['wanted-client-edit', 'wanted-client-delete'],
             'non-prospective-client' => ['non-prospective-client-edit', 'non-prospective-client-delete'],
             'change-client-status' => ['add-to-contact-client', 'add-to-primary-client', 'add-to-wanted-client', 'add-to-non-prospective-client'],
-            'conversation' => ['conversation-create', 'conversation-edit','conversation-delete'],
+            'conversation' => ['conversation-create', 'conversation-edit','conversation-delete','view-conversation'],
             'user' => ['user-create', 'user-edit','user-delete'],
             'role' => ['role-create', 'role-edit','role-delete'],
             'district' => ['district-create', 'district-edit','district-delete'],
             'service-category' => ['service-category-create', 'service-category-edit','service-category-delete'],
             'service-category' => ['service-category-create', 'service-category-edit','service-category-delete'],
             'our-client' => ['our-client-create', 'our-client-edit','our-client-delete'],
+            'client' => ['client-create', 'client-edit','client-delete'],
             // Add more groups and sub-permissions as needed
         ];
 

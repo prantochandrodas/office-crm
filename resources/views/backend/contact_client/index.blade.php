@@ -57,81 +57,131 @@
 <div id="kt_app_content" class="app-content flex-column-fluid">
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-fluid">
-        <div class="card" style="margin-bottom: 50px">
-            <div class="row input-daterange" style="margin-top: 40px">
-                <div id="" class="col-md-4">
-                    <div class="form-group">
-                        <label for="division_id"><b>Divisions</b></label>
-                        <select id="division_id" class="form-select" name="division_id" required>
-                            <option value="">All Divisions</option>
-                            @foreach ($divisions as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+        <div class="card" style="border: 1px solid #50cd89;">
+            <div class="card-header d-flex align-items-center justify-content-between"
+                style="min-height: 40px!important; background-color: #50cd89;">
+                <p class="card-title" style="color: white;">
+                    <svg style="margin-right:5px;" version="1.0" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
 
-                <div id="" class="col-md-4">
-                    <div class="form-group">
-                        <label for="district_id"><b>District</b></label>
-                        <select id="district_id" class="form-select" name="district_id" required>
-                            <option value="">All District</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="" class="col-md-4">
-                    <div class="form-group">
-                        <label for="location_id"><b>Area</b></label>
-                        <select id="location_id" class="form-select" name="location_id" required>
-                            <option value="">All Area</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="" class="col-md-4">
-                    <div class="form-group">
-                        <label for="service_category"><b>Service Category</b></label>
-                        <select id="service_category" class="form-select" name="service_category" required>
-                            <option value="">All Service Catebgory</option>
-                            @foreach ($serviceCategories as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div id="" class="col-md-4">
-                    <div class="form-group">
-                        <label for="project_id"><b>Project</b></label>
-                        <select id="project_id" class="form-select" name="project_id" required>
-                            <option value="">All Project</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-4" style="margin-top: 20px">
-                    <button type="button" name="filter" id="filter"
-                        class="btn btn-success btn-sm d-flex align-items-center">
-                        <i class="fas fa-search"></i> Search
+                        <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="#ffffff" stroke="none">
+                            <path d="M815 5096 c-266 -86 -522 -332 -675 -651 -102 -211 -133 -336 -134
+                -540 -1 -222 23 -286 211 -577 792 -1225 1954 -2379 3163 -3140 169 -106 219
+                -132 312 -158 415 -117 1015 146 1295 566 169 255 174 465 15 644 -48 54 -101
+                86 -527 316 -572 309 -585 314 -769 314 -122 0 -213 -28 -355 -110 -207 -118
+                -383 -119 -555 -2 -182 124 -954 898 -1057 1060 -68 107 -88 268 -50 391 10
+                34 45 106 76 161 84 147 99 200 99 345 -1 190 2 183 -392 909 -122 226 -169
+                303 -214 351 -121 131 -279 174 -443 121z m200 -235 c74 -33 86 -52 436 -702
+                162 -302 172 -329 173 -445 1 -99 9 -77 -112 -309 -63 -120 -85 -221 -80 -364
+                8 -215 62 -323 295 -581 253 -281 725 -741 899 -876 192 -149 444 -191 679
+                -112 33 11 114 49 179 86 117 65 120 66 206 70 61 3 103 0 141 -12 47 -13 843
+                -434 950 -502 90 -56 118 -149 76 -253 -43 -105 -88 -172 -187 -271 -274 -275
+                -671 -411 -937 -321 -154 52 -760 469 -1169 805 -821 673 -1529 1454 -2107
+                2326 -185 278 -217 353 -217 505 0 366 311 843 622 955 67 24 102 24 153 1z"></path>
+                            <path d="M3445 5099 c-127 -16 -244 -77 -335 -175 -69 -75 -105 -141 -130
+                -240 -25 -98 -25 -170 0 -268 27 -107 63 -169 145 -252 110 -112 238 -166 388
+                -166 105 0 164 14 256 59 180 89 301 287 301 493 0 333 -292 590 -625 549z
+                m212 -270 c223 -107 232 -434 14 -552 -164 -90 -365 -22 -443 148 -32 70 -32
+                180 0 250 42 92 127 161 222 181 74 16 133 8 207 -27z"></path>
+                            <path d="M3175 3880 c-86 -11 -213 -55 -292 -101 -77 -45 -219 -189 -266 -269
+                -21 -36 -50 -101 -65 -145 -26 -80 -27 -81 -30 -425 -3 -376 -3 -382 55 -450
+                15 -18 50 -43 78 -56 l50 -24 813 0 c667 0 819 2 846 14 46 19 104 72 129 120
+                21 40 22 51 22 371 0 376 -3 395 -80 550 -75 152 -178 258 -327 335 -144 75
+                -190 82 -548 86 -173 1 -347 -1 -385 -6z m653 -240 c212 -28 379 -176 432
+                -386 17 -67 20 -111 20 -341 l0 -263 -760 0 -760 0 0 283 c0 231 3 293 16 338
+                59 199 227 343 434 369 83 11 535 11 618 0z"></path>
+                        </g>
+                    </svg>
+                    Contact-Clients
+                </p>
+                <div>
+                    <button class="btn btn-sm" data-bs-toggle="collapse" data-bs-target="#serviceCategoryCardBody"
+                        aria-expanded="true">
+                        <i class="fa-solid fa-angle-down text-light fs-2"></i>
                     </button>
+                    <!-- Collapse button -->
+
+                </div>
+            </div>
+            <div id="serviceCategoryCardBody" class="collapse show">
+                <div class="card-body">
+                    <div class="card" style="margin-bottom: 50px">
+                        <div class="row input-daterange" style="margin-top: 40px">
+                            <div id="" class="col-md-4">
+                                <div class="form-group">
+                                    <label for="division_id"><b>Divisions</b></label>
+                                    <select id="division_id" class="form-select" name="division_id" required>
+                                        <option value="">All Divisions</option>
+                                        @foreach ($divisions as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="" class="col-md-4">
+                                <div class="form-group">
+                                    <label for="district_id"><b>District</b></label>
+                                    <select id="district_id" class="form-select" name="district_id" required>
+                                        <option value="">All District</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="" class="col-md-4">
+                                <div class="form-group">
+                                    <label for="location_id"><b>Area</b></label>
+                                    <select id="location_id" class="form-select" name="location_id" required>
+                                        <option value="">All Area</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="" class="col-md-4">
+                                <div class="form-group">
+                                    <label for="service_category"><b>Service Category</b></label>
+                                    <select id="service_category" class="form-select" name="service_category" required>
+                                        <option value="">All Service Catebgory</option>
+                                        @foreach ($serviceCategories as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="" class="col-md-4">
+                                <div class="form-group">
+                                    <label for="project_id"><b>Project</b></label>
+                                    <select id="project_id" class="form-select" name="project_id" required>
+                                        <option value="">All Project</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4" style="margin-top: 20px">
+                                <button type="button" name="filter" id="filter"
+                                    class="btn btn-success btn-sm d-flex align-items-center">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="contactClientTable" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Serial ID</th>
+                                <th>Company Name</th>
+                                <th>Contact Person</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Comment</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
-
-        <table id="contactClientTable" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Serial ID</th>
-                    <th>Company Name</th>
-                    <th>Contact Person</th>
-                    <th>Contact</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Comment</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-        </table>
     </div>
 
 
@@ -280,7 +330,7 @@
                 }
             });
 
-             $('form').on('submit', function() {
+            $('form').on('submit', function() {
                 // Show loading spinner
                 $('#loading').show();
                 $('#backdrop').show(); // Show backdrop when loading

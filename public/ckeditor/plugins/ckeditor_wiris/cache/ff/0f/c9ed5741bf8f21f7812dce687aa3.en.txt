@@ -1,0 +1,1 @@
+{"result":{"text":"E equals h u ⟹ union equals fraction numerator 6.63 cross times 1.6 cross times 10 to the power of negative 19 end exponent over denominator 6.63 cross times 10 to the power of negative 34 end exponent end fraction equals 1.6 cross times 10 to the power of 15 s to the power of negative 1 end exponent"},"status":"ok"}

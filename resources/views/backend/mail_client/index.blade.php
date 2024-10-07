@@ -70,7 +70,7 @@
                     <label for="client_status" class="mb-2 fw-bold">Client Status:</label>
                     <select name="client_status" id="client_status" class="form-control example select2">
                         <option value="all">All Client</option>
-                        <option value="0">Primary Client</option>
+                        <option value="6">Primary Client</option>
                         <option value="1">Contact Client</option>
                         <option value="2">Wanted Client</option>
                         <option value="3">Our Client</option>
@@ -105,7 +105,7 @@
 
                 <div class="mb-3">
                     <label for="message" class="fw-bold">Message :</label>
-                    <textarea class="form-control" id="summernote" name="message" rows="3" required placeholder="Message"></textarea>
+                    <textarea class="form-control" id="editor" name="message" rows="3" required placeholder="Message"></textarea>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-sm mt-4">Send Mail</button>
@@ -129,7 +129,7 @@
                         <tr>
                             <th style="text-align: center;">Serial No</th>
                             <th style="text-align: center;">Client Name</th>
-                            <th style="text-align: center;">Phone Number</th>
+                            <th style="text-align: center;">Client Mail</th>
                         </tr>
                     </thead>
                     <tbody id="clientListData">
@@ -172,7 +172,7 @@
                                 '<td style="text-align:center">' + (key + 1) +
                                 '</td>' +
                                 '<td>' + value.name + '</td>' +
-                                '<td>' + value.phone + '</td>' +
+                                '<td>' + value.email + '</td>' +
                                 '</tr>';
                             $('#client_name').append('<option value="' + value.id +
                                 '">' + value.name + '</option>');
@@ -202,7 +202,7 @@
                         var clientListHtml = '<tr>' +
                             '<td>1</td>' +
                             '<td>' + client.name + '</td>' +
-                            '<td>' + client.phone + '</td>' +
+                            '<td>' + client.email + '</td>' +
                             '</tr>';
                         $('#clientListData').html(clientListHtml);
                     },
@@ -215,10 +215,7 @@
             }
         })
 
-        // Initialize Summernote
-        $('#summernote').summernote({
-            height: 250
-        });
+        CKEDITOR.replace('editor');
 
         // Optionally trigger change to load default client status (all)
         $('#client_status').val(defaultClientStatus).trigger('change');

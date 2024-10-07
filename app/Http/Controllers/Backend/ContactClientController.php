@@ -93,6 +93,7 @@ class ContactClientController extends Controller
                     $addWantedClient ='';
                     $addNonProspective = '';
                     $addConversation ='';
+                    $viewConversation = '';
 
                     $editUrl = route('contact-clients.edit', $row->id);
                     $deleteUrl = route('contact-clients.distroy', $row->id);
@@ -126,11 +127,13 @@ class ContactClientController extends Controller
                     </svg>
                     </span></button>';
                     }
-
+                    if (auth()->user()->can('view-conversation')) {
                     $viewConversation = '<button class="btn btn-sm ms-2 view-conversation" style="padding: 8px; background-color:#6c757d" data-customer-id="' . $row->id . '"  data-bs-toggle="modal" data-bs-target="#viewConversationdrop">
                     <span>
                     <svg fill="#ffffff" height="20px" width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <g> <circle cx="367.5" cy="85.6" r="51.3"></circle> <path d="M367.5,160.6c-67.7,0-122.5,54.8-122.5,122.5h245C490,215.4,435.2,160.6,367.5,160.6z"></path> <circle cx="122.5" cy="292.1" r="51.3"></circle> <path d="M122.5,367.5C54.8,367.5,0,422.3,0,490h245C245,422.3,190.2,367.5,122.5,367.5z"></path> <path d="M217,180.4V131h31.1V0H22.6v131.1h142.7L217,180.4z M196,55.6h5.1c5.4,0,10.1,4.3,10.1,10.1s-4.3,10.1-10.1,10.1H196 c-5.4,0-10.1-4.3-10.1-10.1S190.6,55.6,196,55.6z M74.7,75.4h-5.1c-5.4,0-10.1-4.3-10.1-10.1c0-5.8,4.3-10.1,10.1-10.1h5.1 c5.4,0,10.1,4.3,10.1,10.1C84.8,71.2,80.1,75.4,74.7,75.4z M137.7,75.4h-5.1c-5.4,0-10.1-4.3-10.1-10.1c0-5.8,4.3-10.1,10.1-10.1 h5.1c5.4,0,10.1,4.3,10.1,10.1C147.8,71.2,143.1,75.4,137.7,75.4z"></path> </g> </g> </g> </g></svg>
                     </span></button>';
+                    }
+
                     if (auth()->user()->can('contact-client-edit')) {
                         $editBtn = '<a href="' . $editUrl . '" class="edit btn btn-sm btn-success me-2 rounded" style="padding:8px;"><span>' .
                             '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">' .

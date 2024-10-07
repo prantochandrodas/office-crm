@@ -26,7 +26,7 @@
     @endif
 
 @section('title')
-    Primary-client
+    All-Client
 @endsection
 
 <!--begin::Toolbar-->
@@ -43,8 +43,8 @@
             <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
                 <!--begin::Item-->
                 <li class="breadcrumb-item text-muted">
-                    <a href="{{ route('primary-clients') }}"
-                        class="text-muted text-hover-primary">All-Primary-Client</a>
+                    <a href="{{ route('all-clients') }}"
+                        class="text-muted text-hover-primary">All-Client</a>
                 </li>
                 <!--end::Item-->
                 <!--begin::Item-->
@@ -66,11 +66,11 @@
 
 <div class="app-container container-fluid">
     <div style="background-color: #f0f0f0; padding: 20px;">
-        <h2 style="text-align: center;">Edit Customer</h2>
+        <h2 style="text-align: center;">Edit Client</h2>
     </div>
 
     <div style="background-color: #fff; padding: 20px; border: 1px solid #ccc;">
-        <form method="POST" action="{{ route('primary-clients.update', $customer->id) }}"
+        <form method="POST" action="{{ route('all-clients.update', $customer->id) }}"
             enctype="multipart/form-data">
             @csrf
             @method('PUT')

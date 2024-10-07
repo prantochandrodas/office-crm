@@ -25,7 +25,7 @@
             display: block;
             margin: 0 auto 10px;
         }
-        .card-header p{
+        .card-header h2{
             font-weight: 700;
             color: #005fac;
         }
@@ -64,7 +64,7 @@
                 <div class="card">
                     <div class="card-header text-center">
                         <img src="{{ asset('image/'.generalSetting()->logo)}}" height="100" alt="Application Logo">
-                        <p>Office Crm Signin</p>
+                        <h2>Login</h2>
                     </div>
                     <div class="card-body">
                         <form method="POST" action="{{ route('login') }}">

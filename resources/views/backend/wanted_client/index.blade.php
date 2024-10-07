@@ -57,89 +57,118 @@
 <div id="kt_app_content" class="app-content flex-column-fluid">
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-fluid">
-        {{-- filter form  --}}
-
-        <div class="card" style="margin-bottom: 50px">
-            <div class="row input-daterange" style="margin-top: 40px">
-                <div id="" class="col-md-4">
-                    <div class="form-group">
-                        <label for="division_id"><b>Divisions</b></label>
-                        <select id="division_id" class="form-select" name="division_id" required>
-                            <option value="">All Divisions</option>
-                            @foreach ($divisions as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div id="" class="col-md-4">
-                    <div class="form-group">
-                        <label for="district_id"><b>District</b></label>
-                        <select id="district_id" class="form-select" name="district_id" required>
-                            <option value="">All District</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="" class="col-md-4">
-                    <div class="form-group">
-                        <label for="location_id"><b>Area</b></label>
-                        <select id="location_id" class="form-select" name="location_id" required>
-                            <option value="">All Area</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div id="" class="col-md-4">
-                    <div class="form-group">
-                        <label for="service_category"><b>Service Category</b></label>
-                        <select id="service_category" class="form-select" name="service_category" required>
-                            <option value="">All Service Catebgory</option>
-                            @foreach ($serviceCategories as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div id="" class="col-md-4">
-                    <div class="form-group">
-                        <label for="project_id"><b>Project</b></label>
-                        <select id="project_id" class="form-select" name="project_id" required>
-                            <option value="">All Project</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-4" style="margin-top: 20px">
-                    <button type="button" name="filter" id="filter"
-                        class="btn btn-success btn-sm d-flex align-items-center">
-                        <i class="fas fa-search"></i> Search
+        <div class="card" style="border: 1px solid #50cd89;">
+            <div class="card-header d-flex align-items-center justify-content-between"
+                style="min-height: 40px!important; background-color: #50cd89;">
+                <p class="card-title" style="color: white;">
+                    <svg style="height: 24px; width:24px; margin-right:5px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round">
+                        </g>
+                        <g id="SVGRepo_iconCarrier">
+                            <circle cx="12" cy="6" r="4" fill="#ffffff"></circle>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 22C14.8501 22 14.0251 22 13.5126 21.4874C13 20.9749 13 20.1499 13 18.5C13 16.8501 13 16.0251 13.5126 15.5126C14.0251 15 14.8501 15 16.5 15C18.1499 15 18.9749 15 19.4874 15.5126C20 16.0251 20 16.8501 20 18.5C20 20.1499 20 20.9749 19.4874 21.4874C18.9749 22 18.1499 22 16.5 22ZM18.468 17.7458C18.6958 17.518 18.6958 17.1487 18.468 16.9209C18.2402 16.693 17.8709 16.693 17.6431 16.9209L15.7222 18.8417L15.3569 18.4764C15.1291 18.2486 14.7598 18.2486 14.532 18.4764C14.3042 18.7042 14.3042 19.0736 14.532 19.3014L15.3097 20.0791C15.5375 20.307 15.9069 20.307 16.1347 20.0791L18.468 17.7458Z" fill="#ffffff"></path>
+                            <path d="M15.4147 13.5074C14.4046 13.1842 13.24 13 12 13C8.13401 13 5 14.7909 5 17C5 19.1406 7.94244 20.8884 11.6421 20.9949C11.615 20.8686 11.594 20.7432 11.5775 20.6201C11.4998 20.0424 11.4999 19.3365 11.5 18.586V18.414C11.4999 17.6635 11.4998 16.9576 11.5775 16.3799C11.6639 15.737 11.8705 15.0333 12.4519 14.4519C13.0334 13.8705 13.737 13.6639 14.3799 13.5774C14.6919 13.5355 15.0412 13.5162 15.4147 13.5074Z" fill="#ffffff"></path>
+                        </g>
+                    </svg>
+                    Wanted-Clients
+                </p>
+                <div>
+                    <button class="btn btn-sm" data-bs-toggle="collapse" data-bs-target="#serviceCategoryCardBody"
+                        aria-expanded="true">
+                        <i class="fa-solid fa-angle-down text-light fs-2"></i>
                     </button>
+                    <!-- Collapse button -->
+
+                </div>
+            </div>
+            <div id="serviceCategoryCardBody" class="collapse show">
+                <div class="card-body">
+                    {{-- filter form  --}}
+                    <div class="card" style="margin-bottom: 50px; padding:10px">
+                        <div class="row input-daterange" style="margin-top: 40px; padding:10px">
+                            <div id="" class="col-md-4">
+                                <div class="form-group">
+                                    <label for="division_id"><b>Divisions</b></label>
+                                    <select id="division_id" class="form-select" name="division_id" required>
+                                        <option value="">All Divisions</option>
+                                        @foreach ($divisions as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="" class="col-md-4">
+                                <div class="form-group">
+                                    <label for="district_id"><b>District</b></label>
+                                    <select id="district_id" class="form-select" name="district_id" required>
+                                        <option value="">All District</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="" class="col-md-4">
+                                <div class="form-group">
+                                    <label for="location_id"><b>Area</b></label>
+                                    <select id="location_id" class="form-select" name="location_id" required>
+                                        <option value="">All Area</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="" class="col-md-4">
+                                <div class="form-group">
+                                    <label for="service_category"><b>Service Category</b></label>
+                                    <select id="service_category" class="form-select" name="service_category" required>
+                                        <option value="">All Service Catebgory</option>
+                                        @foreach ($serviceCategories as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="" class="col-md-4">
+                                <div class="form-group">
+                                    <label for="project_id"><b>Project</b></label>
+                                    <select id="project_id" class="form-select" name="project_id" required>
+                                        <option value="">All Project</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4" style="margin-top: 20px">
+                                <button type="button" name="filter" id="filter"
+                                    class="btn btn-success btn-sm d-flex align-items-center">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- end filter form  --}}
+
+
+                    <table id="wantedClientTable" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Serial ID</th>
+                                <th>Company Name</th>
+                                <th>Contact Person</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Comment</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
-
-        {{-- end filter form  --}}
-      
-      
-        <table id="wantedClientTable" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Serial ID</th>
-                    <th>Company Name</th>
-                    <th>Contact Person</th>
-                    <th>Contact</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Comment</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-        </table>
     </div>
 
-    
+
     @include('backend.wanted_client.conversation_modal')
     @include('backend.wanted_client.view_conversation_modal')
     <!-- Custom CSS for Table Borders -->
@@ -173,8 +202,8 @@
                     toastr.error('{{ $error }}');
                 @endforeach
             @endif
-             // data table code 
-             window.onload = function() {
+            // data table code 
+            window.onload = function() {
                 load_data();
 
                 function load_data(status = "", division_id = "", project_id = "", service_category = "",
@@ -261,8 +290,8 @@
                 });
             }
 
-             // When District changes, load Locations
-             $('#district_id').on('change', function() {
+            // When District changes, load Locations
+            $('#district_id').on('change', function() {
                 var district_id = $(this).val();
                 if (district_id) {
                     $.ajax({
@@ -290,7 +319,7 @@
                 $('#backdrop').show(); // Show backdrop when loading
             });
         });
-        
+
         $(document).on('change', '#division_id', function() {
             let divisionId = $(this).val();
             let district = $(this).find('#district_id');
